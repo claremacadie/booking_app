@@ -4,12 +4,11 @@ import TimeoutError from '../utils/timeoutError.js';
 export default class DBAPI {
   constructor(url) {
     this.url = url;
-    this.path = '/contacts'; // needs changing
   }
 
   // ---------- public API ----------
-  fetchData() {
-    return this.#request(this.path);
+  fetchAllSchedules() {
+    return this.#request('/schedules');
   }
 
   postData(data) {

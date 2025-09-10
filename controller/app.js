@@ -5,7 +5,7 @@ import TimeoutError from '../utils/timeoutError.js';
 import HttpError from '../utils/httpError.js';
 
 // Import model classes
-import Model from '../model/model.js';
+import Schedule from '../model/schedule.js';
 
 // Import view classes
 import ViewForm from '../view/viewForm.js';
@@ -18,21 +18,17 @@ export default class App {
   }
   
   async #init() {
-    this.$firstPageDiv = document.getElementById("first-page");
-    this.$secondPageDiv = document.getElementById("second-page");
+    this.$allSchedulesDiv = document.getElementById("all-schedules");
     this.$userMessage = document.getElementById("user-message");
     this.$errorMessage = document.getElementById("error-message");
 
-    this.contactDBAPI = new DBAPI(this.url);
+    this.DBAPI = new DBAPI(this.url);
     this.appController = new AppController(this);
 
     try {
-      // load data using this.DBAPI
-
-      // create model and view instances
-      this.model = new Model(this.url);
-      this.viewForm = new ViewForm(this.url);
-      this.viewList = new ViewList(this.url);
+      this.allSchedules = await this.#fetchAllSchedules();
+      this.viewList = new ViewList(this);
+      // this.viewForm = new ViewForm(this.url);
       
       this.#createHTML();
       this.#configureHTML();
@@ -69,7 +65,7 @@ export default class App {
       return;
     } else if (error?.name === 'AbortError') {
       this.displayUserMessage('Request aborted.');
-    } else if (err instanceof TimeoutError) {
+    } else if (error instanceof TimeoutError) {
       this.displayErrorMessage('Request timed out. Please try again.');
     } else {
       console.error(error);
@@ -78,7 +74,19 @@ export default class App {
   }
 
   // -- Model --
-  
+  async #fetchAllSchedules() {
+    let schedules = [];
+
+    let schedulesDataArr = await this.DBAPI.fetchAllSchedules();
+    schedulesDataArr.forEach (dataObj => {
+      let scheduleObj = new Schedule(dataObj);
+      schedules.push(scheduleObj)
+    });
+
+    return schedules;
+  }
+
+
   
   // -- ViewList --
  
@@ -103,10 +111,24 @@ export default class App {
   }
 
   #createHTML() {
-    // populate first-page and second-page divs
+    this.$allSchedulesDiv.append(this.viewList.$ul);
   }
   
   #configureHTML() {
     // add hidden class to pages you don't want to see
   }
 }
+
+/*
+To do:
+  CSS for schedule list
+  Messages to user, including:
+    - how many schedules are display
+    - Loading, loaded, etc.
+  Delay of 7 seconds manufactured, user setTimeout to display something if more than 5 seconds - cancel retrieval and try again
+  Title for schedule list
+
+  Remove more from skeleton - it's too confusing with too much code
+
+  Buttons in header to switch between different views
+*/

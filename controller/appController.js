@@ -10,31 +10,31 @@ export default class AppController {
   }
 
   #init() {
-    this.viewForm = this.app.viewForm;
-    this.$form = this.viewForm.$form;
-    this.$updateButton = this.viewForm.$updateButton;
-    this.$cancelButton = this.viewForm.$cancelButton;
+    // this.viewForm = this.app.viewForm;
+    // this.$form = this.viewForm.$form;
+    // this.$updateButton = this.viewForm.$updateButton;
+    // this.$cancelButton = this.viewForm.$cancelButton;
 
-    this.viewList = this.app.viewList;
-    this.$addButton = this.viewList.$addButton;
-    this.$searchInput = this.viewList.$searchInput;
-    this.$viewListDiv = this.viewList.$listDiv;
+    // this.viewList = this.app.viewList;
+    // this.$addButton = this.viewList.$addButton;
+    // this.$searchInput = this.viewList.$searchInput;
+    // this.$viewListDiv = this.viewList.$listDiv;
 
-    this.DBAPI = this.app.DBAPI;
+    // this.DBAPI = this.app.DBAPI;
 
     // this.handleSearch = debounce(this.handleSearch.bind(this));
     // this.handleTagSelect = debounce(this.handleTagSelect.bind(this));
   } 
 
   #bind() {
-    this.$form.addEventListener('submit', this.#handleFormSubmit.bind(this));
-    this.$cancelButton.addEventListener('click', this.#handleCancelButton.bind(this));
-    this.$updateButton.addEventListener('click', this.#handleUpdate.bind(this));
+    // this.$form.addEventListener('submit', this.#handleFormSubmit.bind(this));
+    // this.$cancelButton.addEventListener('click', this.#handleCancelButton.bind(this));
+    // this.$updateButton.addEventListener('click', this.#handleUpdate.bind(this));
 
-    this.$addButton.addEventListener('click', this.#handleAdd.bind(this));
-    this.$searchInput.addEventListener('input', this.handleSearch);
+    // this.$addButton.addEventListener('click', this.#handleAdd.bind(this));
+    // this.$searchInput.addEventListener('input', this.handleSearch);
 
-    this.$viewListDiv.addEventListener('click', this.#handleviewListClick.bind(this));
+    // this.$viewListDiv.addEventListener('click', this.#handleviewListClick.bind(this));
   }
 
   // ---------- Public handlers ----------
