@@ -29,10 +29,8 @@ export default class App {
     try {
       this.displayUserMessage('Loading schedules');
       this.allSchedules = await this.#fetchAllSchedules();
-      this.displayUserMessage(`Schedules loaded successfully. There are ${this.allSchedules.length} schedules.`);
-      this.#displayAllSchedulesMode();
-      this.scheduleList = new ScheduleList(this);
-      this.#periodicDataFetch(); 
+      this.#displayAllSchedules();
+      // this.#periodicDataFetch(); 
     } catch(error) {
       this.clearUserMessage();
       this.handleError(error, 'Could not load schedules.');
@@ -73,6 +71,17 @@ export default class App {
   }
 
   // ---------- private API ----------
+  #displayAllSchedules() {
+    this.#displayAllSchedulesMode();
+    let schedulesTally = this.allSchedules.length;
+
+    if (schedulesTally === 0) {
+      this.displayUserMessage('No schedules are available for booking.');
+    } else {
+      this.displayUserMessage(`Schedules loaded successfully. There are ${this.allSchedules.length} schedules.`);
+      this.scheduleList = new ScheduleList(this);
+    }
+  }
   #displayAllSchedulesMode() {
     this.$pageHeading.textContent = "Schedule List";
     this.$allSchedulesDiv.classList.remove('hidden');
