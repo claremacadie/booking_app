@@ -25,16 +25,17 @@ export default class App {
 
     this.DBAPI = new DBAPI(this.url);
     this.appController = new AppController(this);
-
+    
     try {
+      this.displayUserMessage('Loading schedules');
       this.allSchedules = await this.#fetchAllSchedules();
+      this.displayUserMessage(`Schedules loaded successfully. There are ${this.allSchedules.length} schedules.`);
       this.#displayAllSchedulesMode();
       this.scheduleList = new ScheduleList(this);
-      // this.#periodicDataFetch(); 
+      this.#periodicDataFetch(); 
     } catch(error) {
-        this.handleError(error, 'Could not load content.');
-    } finally {
       this.clearUserMessage();
+      this.handleError(error, 'Could not load schedules.');
     }
   }
   
@@ -55,7 +56,7 @@ export default class App {
     this.$errorMessage.textContent = '';
   }
 
-  handleError(error, msg='Something went wrong. Please try again.') {
+  handleError(error, msg='Something went wrong.') {
     if (error instanceof ValidationError) {
       this.displayErrorMessage(error.message);
     } else if (error instanceof HttpError) {
@@ -64,7 +65,7 @@ export default class App {
     } else if (error?.name === 'AbortError') {
       this.displayUserMessage('Request aborted.');
     } else if (error instanceof TimeoutError) {
-      this.displayErrorMessage('Request timed out. Please try again.');
+      this.displayErrorMessage(`${msg} Request timed out.`);
     } else {
       console.error(error);
       this.displayErrorMessage(msg);
@@ -108,10 +109,6 @@ export default class App {
 
 /*
 To do:
-  Messages to user, including:
-    - how many schedules are displayed
-    - Loading, loaded, etc.
-  Delay of 7 seconds manufactured, user setTimeout to display something if more than 5 seconds - cancel retrieval and try again
 
   Buttons in header to switch between different views
 */

@@ -8,7 +8,10 @@ export default class DBAPI {
 
   // ---------- public API ----------
   fetchAllSchedules() {
-    return this.#request('/schedules');
+    return Promise.race([
+      this.#setTimeoutPromise(5000), 
+      this.#request('/schedules')
+    ]);
   }
 
   postData(data) {
