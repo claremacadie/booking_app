@@ -118,6 +118,40 @@ export default class App {
 
 /*
 To do:
+  Buttons, with eventListeners in header to switch between different views:
+    - displayAllSchedulesMode
+    - displayStaffFormMode
+  Change default mode to be displayed for each part of the assignment
 
-  Buttons in header to switch between different views
+  Create staffForm class:
+    - Email and Name input, Submit button
+      <form method="post" action="/api/staff_members">
+        <dl>
+          <dt>
+            <label for="email">Email</label>
+          </dt>
+          <dd>
+            <input type="email" id="email" name="email">
+          </dd>
+          <dt>
+            <label for="name">Name</label>
+          </dt>
+          <dd>
+            <input type="text" id="name" name="name">
+          </dd>
+        </dl>
+        <input type="submit">
+      </form>
+
+    - Event listener in appcontroller
+    - Event handler in appcontroller
+      - Validate inputs - none empty
+      - Error message: Staff cannot be created. Check your inputs.
+      - Fetch request: path = '/staff_members', fields `name` and `email`
+      - success = 201, {id: 14}
+      - error = 4xx "Staff can not be created. Check your inputs."
+      - Success message: Successfully created staff with id: 14
+
+
+  
 */
