@@ -1,11 +1,24 @@
-div {
-  padding: 0.5em;
-}
-
-li {
-  list-style: none;
-}
-
 .hidden {
   display: none;
 }
+
+/* Schedule list */
+.schedule-list > li {
+  padding: 4px 0;
+}
+
+.schedule-list > li dt,
+.schedule-list > li dd {
+  display: inline;
+}
+
+.schedule-list > li dt::after {
+  content: ": ";
+}
+
+.schedule-list > li dt:not(:first-of-type)::before {
+  content: " | ";
+}
+
+
+
