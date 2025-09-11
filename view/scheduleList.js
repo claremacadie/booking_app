@@ -1,4 +1,4 @@
-export default class ViewList {
+export default class ScheduleList {
   constructor(app) {
     this.app = app;
     this.#init();
@@ -20,7 +20,8 @@ export default class ViewList {
   }
 
   #configureHTML() {
-    this.$ul.classList.add('schedule-list')
+    this.$ul.classList.add('schedule-list');
+    this.app.$allSchedulesDiv.append(this.$ul);
   }
 
   // ---------- helpers ----------

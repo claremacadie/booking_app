@@ -9,7 +9,7 @@ import Schedule from '../model/schedule.js';
 
 // Import view classes
 import ViewForm from '../view/viewForm.js';
-import ViewList from '../view/viewList.js';
+import ScheduleList from '../view/scheduleList.js';
 
 export default class App {
   constructor(url) {
@@ -18,6 +18,7 @@ export default class App {
   }
   
   async #init() {
+    this.$pageHeading = document.getElementById("page-heading");
     this.$allSchedulesDiv = document.getElementById("all-schedules");
     this.$userMessage = document.getElementById("user-message");
     this.$errorMessage = document.getElementById("error-message");
@@ -27,10 +28,8 @@ export default class App {
 
     try {
       this.allSchedules = await this.#fetchAllSchedules();
-      this.viewList = new ViewList(this);
-      
-      this.#createHTML();
-      
+      this.#displayAllSchedulesMode();
+      this.scheduleList = new ScheduleList(this);
       // this.#periodicDataFetch(); 
     } catch(error) {
         this.handleError(error, 'Could not load content.');
@@ -72,7 +71,12 @@ export default class App {
     }
   }
 
-  // -- Model --
+  // ---------- private API ----------
+  #displayAllSchedulesMode() {
+    this.$pageHeading.textContent = "Schedule List";
+    this.$allSchedulesDiv.classList.remove('hidden');
+  }
+
   async #fetchAllSchedules() {
     let schedules = [];
 
@@ -100,22 +104,14 @@ export default class App {
       }
     }, ms);
   }
-
-  #createHTML() {
-    this.$allSchedulesDiv.append(this.viewList.$ul);
-  }
 }
 
 /*
 To do:
-  CSS for schedule list
   Messages to user, including:
-    - how many schedules are display
+    - how many schedules are displayed
     - Loading, loaded, etc.
   Delay of 7 seconds manufactured, user setTimeout to display something if more than 5 seconds - cancel retrieval and try again
-  Title for schedule list
-
-  Remove more from skeleton - it's too confusing with too much code
 
   Buttons in header to switch between different views
 */
