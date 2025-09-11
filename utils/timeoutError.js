@@ -1,5 +1,5 @@
 export default class TimeoutError extends Error {
-  constructor(message) {
+  constructor(message='Operation timed out.') {
     super(message);
     this.name = 'TimeoutError';
   }

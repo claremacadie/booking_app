@@ -8,14 +8,11 @@ export default class DBAPI {
 
   // ---------- public API ----------
   fetchAllSchedules() {
-    return Promise.race([
-      this.#setTimeoutPromise(5000), 
-      this.#request('/schedules')
-    ]);
+    return this.#requestWithTimeout(3000, '/schedules');
   }
 
   postData(data) {
-    return this.#request(this.path, {
+    return this.#requestWithTimeout(5000, this.path, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: data,
@@ -23,7 +20,7 @@ export default class DBAPI {
   }
 
   updateData(data, id) {
-    return this.#request(`${this.path}/${id}`, {
+    return this.#requestWithTimeout(5000, `${this.path}/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: data,
@@ -31,20 +28,20 @@ export default class DBAPI {
   }
 
   deleteData(id) {
-    return this.#request(`${this.path}/${id}`, { method: 'DELETE' }, false);
+    return this.#requestWithTimeout(5000, `${this.path}/${id}`, { method: 'DELETE' }, false);
   }
-
-  // ---------- private API ----------
-  #setTimeoutPromise(ms) {
+  
+  timeoutPromise(ms) {
     return new Promise((_, reject) => {
       setTimeout(() => reject(new TimeoutError('Fetch request timed out')), ms);
     });
   }
 
-  async #request(path, requestInitObj = {}, expectJson = true) {
+  // ---------- private API ----------
+  async #requestWithTimeout(delay, path, requestInitObj = {}, expectJson = true) {
     const res = await Promise.race([
       fetch(`${this.url}${path}`, requestInitObj),
-      this.#setTimeoutPromise(2000),
+      this.timeoutPromise(delay),
     ]);
 
     if (!res.ok) {
