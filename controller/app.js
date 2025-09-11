@@ -76,7 +76,7 @@ export default class App {
     let schedulesTally = this.allSchedules.length;
 
     if (schedulesTally === 0) {
-      this.displayUserMessage('No schedules are available for booking.');
+      this.displayUserMessage('There are currently no schedules available for booking.');
     } else {
       this.displayUserMessage(`Schedules loaded successfully. There are ${this.allSchedules.length} schedules.`);
       this.scheduleList = new ScheduleList(this);
