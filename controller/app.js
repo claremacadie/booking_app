@@ -28,10 +28,9 @@ export default class App {
     try {
       this.allSchedules = await this.#fetchAllSchedules();
       this.viewList = new ViewList(this);
-      // this.viewForm = new ViewForm(this.url);
       
       this.#createHTML();
-      this.#configureHTML();
+      
       // this.#periodicDataFetch(); 
     } catch(error) {
         this.handleError(error, 'Could not load content.');
@@ -86,14 +85,6 @@ export default class App {
     return schedules;
   }
 
-
-  
-  // -- ViewList --
- 
-
-  // -- ViewForm --
-  
-
   // ---------- private API ----------
 
   #periodicDataFetch() {
@@ -112,10 +103,6 @@ export default class App {
 
   #createHTML() {
     this.$allSchedulesDiv.append(this.viewList.$ul);
-  }
-  
-  #configureHTML() {
-    // add hidden class to pages you don't want to see
   }
 }
 

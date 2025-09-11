@@ -5,16 +5,11 @@ export default class ViewList {
   }
 
   #init() {
-    // this.searchCriteria = {'full_name': '', 'tags': []};
     this.$ul = document.createElement('ul');
     this.#createHTML();
   }
 
   // ---------- public API ----------
-  // resetSearch() {
-  //   this.$searchInput.value = '';
-  //   this.searchCriteria = {'full_name': '', 'tags': []};
-  // }
 
   // ---------- private API ----------
   #createHTML() {
@@ -24,5 +19,5 @@ export default class ViewList {
   }
 
   // ---------- helpers ----------
-    // to create or configure HTML
+   
 }
