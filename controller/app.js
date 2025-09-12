@@ -25,8 +25,8 @@ export default class App {
     this.$errorMessage = document.getElementById("error-message");
 
     this.DBAPI = new DBAPI(this.url);
+    this.staffForm = new StaffForm(this);
     this.appController = new AppController(this);
-    this.addStaffForm = new StaffForm(this);
     
     try {
       // this.displayUserMessage('Loading schedules');
@@ -88,6 +88,7 @@ export default class App {
   }
 
   // ---------- private API ----------
+  // --- Schedules ---
   #displayAllSchedules() {
     this.displayAllSchedulesMode();
     let schedulesTally = this.allSchedules.length;
@@ -131,14 +132,13 @@ export default class App {
 
 /*
 To do:
+  object to store divs
   Buttons, with eventListeners in header to switch between different views:
     - displayAllSchedulesMode
     - displayStaffFormMode
   Change default mode to be displayed for each part of the assignment
 
   Create staffForm class:
-    - Email and Name input, Submit button
-    - Event listener in appcontroller
     - Event handler in appcontroller
       - Validate inputs - none empty
       - Error message: Staff cannot be created. Check your inputs.

@@ -10,17 +10,26 @@ export default class AppController {
   }
 
   #init() {
-    
+    this.$staffForm = this.app.staffForm.$form;
   } 
 
   #bind() {
-    
+    this.$staffForm.addEventListener('submit', this.#handleStaffFormSubmit.bind(this));
   }
 
   // ---------- Public handlers ----------
 
   // ---------- Private handlers ----------
-  
+  #handleStaffFormSubmit(event) {
+    event.preventDefault();
+    console.log('hi');
+    // - Validate inputs - none empty
+    //   - Error message: Staff cannot be created. Check your inputs.
+    //   - Fetch request: path = '/staff_members', fields `name` and `email`
+    //   - success = 201, {id: 14}
+    //   - error = 4xx "Staff can not be created. Check your inputs."
+    //   - Success message: Successfully created staff with id: 14
+  }
   // ---------- helpers ----------
   #extractData(formData) {
     let data = Object.fromEntries(formData.entries());
