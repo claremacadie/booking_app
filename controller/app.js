@@ -8,7 +8,7 @@ import HttpError from '../utils/httpError.js';
 import Schedule from '../model/schedule.js';
 
 // Import view classes
-import ViewForm from '../view/viewForm.js';
+import StaffForm from '../view/staffForm.js';
 import ScheduleList from '../view/scheduleList.js';
 
 export default class App {
@@ -20,16 +20,21 @@ export default class App {
   async #init() {
     this.$pageHeading = document.getElementById("page-heading");
     this.$allSchedulesDiv = document.getElementById("all-schedules");
+    this.$staffFormDiv = document.getElementById("staff-form");
     this.$userMessage = document.getElementById("user-message");
     this.$errorMessage = document.getElementById("error-message");
 
     this.DBAPI = new DBAPI(this.url);
     this.appController = new AppController(this);
+    this.addStaffForm = new StaffForm(this);
     
     try {
-      this.displayUserMessage('Loading schedules');
-      this.allSchedules = await this.#fetchAllSchedules();
-      this.#displayAllSchedules();
+      // this.displayUserMessage('Loading schedules');
+      // this.allSchedules = await this.#fetchAllSchedules();
+      // this.#displayAllSchedules();
+
+      this.displayStaffFormMode();
+
       // this.#periodicDataFetch(); 
     } catch(error) {
       this.clearUserMessage();
@@ -38,6 +43,18 @@ export default class App {
   }
   
   // ---------- public API ----------
+  displayAllSchedulesMode() {
+    this.$pageHeading.textContent = "Schedule List";
+    this.$allSchedulesDiv.classList.remove('hidden');
+    this.$addStaffDiv.classList.add('hidden');
+  }
+  
+  displayStaffFormMode() {
+    this.$pageHeading.textContent = "Add Staff";
+    this.$allSchedulesDiv.classList.add('hidden');
+    this.$staffFormDiv.classList.remove('hidden');
+  }
+
   displayUserMessage(msg) {
     this.$userMessage.textContent = msg;
   }
@@ -72,7 +89,7 @@ export default class App {
 
   // ---------- private API ----------
   #displayAllSchedules() {
-    this.#displayAllSchedulesMode();
+    this.displayAllSchedulesMode();
     let schedulesTally = this.allSchedules.length;
 
     if (schedulesTally === 0) {
@@ -81,10 +98,6 @@ export default class App {
       this.displayUserMessage(`Schedules loaded successfully. There are ${this.allSchedules.length} schedules.`);
       this.scheduleList = new ScheduleList(this);
     }
-  }
-  #displayAllSchedulesMode() {
-    this.$pageHeading.textContent = "Schedule List";
-    this.$allSchedulesDiv.classList.remove('hidden');
   }
 
   async #fetchAllSchedules() {
@@ -125,24 +138,6 @@ To do:
 
   Create staffForm class:
     - Email and Name input, Submit button
-      <form method="post" action="/api/staff_members">
-        <dl>
-          <dt>
-            <label for="email">Email</label>
-          </dt>
-          <dd>
-            <input type="email" id="email" name="email">
-          </dd>
-          <dt>
-            <label for="name">Name</label>
-          </dt>
-          <dd>
-            <input type="text" id="name" name="name">
-          </dd>
-        </dl>
-        <input type="submit">
-      </form>
-
     - Event listener in appcontroller
     - Event handler in appcontroller
       - Validate inputs - none empty

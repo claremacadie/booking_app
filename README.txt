@@ -12,7 +12,8 @@ Frontend Application
   App expects a backend at: localhost:3000, files are in booking_node
   CORS has been enabled for booking_node
 
-  Make sure your server is running and reachable at that URL, probably by going to a node folder and running npm install, then npm start.
+  Make sure your server is running and reachable at that URL, 
+  probably by going to a node folder and running npm install, then npm start.
 
 - Notes
   Turn Live Server off in VS Code (status bar should show Go Live).
