@@ -1,8 +1,5 @@
-import ValidationError from '../utils/validationError.js';
-import HttpError from '../utils/httpError.js';
-import debounce from '../utils/debounce.js';
-
 import ScheduleList from '../view/scheduleList.js';
+
 export default class AppController {
   constructor(app) {
     this.app = app;
@@ -12,6 +9,8 @@ export default class AppController {
 
   #init() {
     this.$staffForm = this.app.staffForm.$form;
+    // Set default view
+    this.#displayStaffForm();
   } 
 
   #bind() {
@@ -20,9 +19,9 @@ export default class AppController {
     this.app.$staffFormBtn.addEventListener('click', this.#handleStaffFormBtn.bind(this));
   }
 
-  // ---------- Public API ----------
+  // ---------- Private API ----------
   // --- Schedules ---
-  displaySchedules() {
+  #displaySchedules() {
     this.app.$schedulesDiv.innerHTML = '';
     this.app.clearUserMsg();
     this.app.clearErrorMsg();
@@ -35,15 +34,24 @@ export default class AppController {
     this.app.loadSchedules();
   }
 
+  // --- Staff Form ---
+  #displayStaffForm() {
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
+    this.app.$pageHeading.textContent = "Add Staff";
+    this.app.$schedulesDiv.classList.add('hidden');
+    this.app.$staffFormDiv.classList.remove('hidden');
+  }
+
   // ---------- Private handlers ----------
   #handleSchedulesBtn(event) {
     event.preventDefault();
-    this.displaySchedules();
+    this.#displaySchedules();
   }
   
   #handleStaffFormBtn(event) {
     event.preventDefault();
-    console.log('hi');
+    this.#displayStaffForm();
   }
 
   async #handleStaffFormSubmit(event) {

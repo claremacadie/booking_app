@@ -24,10 +24,6 @@ export default class App {
     this.DBAPI = new DBAPI(this.url);
     this.staffForm = new StaffForm(this);
     this.appController = new AppController(this);
-    
-    // Set default view
-    this.appController.displaySchedules();
-    // this.displayStaffForm();
   }
   
   // ---------- public API ----------  
@@ -68,20 +64,7 @@ export default class App {
       this.userMsg(`${this.$userMsg.textContent} The request has completed.`)
     }
   }
-
-  // --- Staff Form ---
-  displayStaffForm() {
-    this.clearUserMsg();
-    this.clearErrorMsg();
-    this.$pageHeading.textContent = "Add Staff";
-    this.$schedulesDiv.classList.add('hidden');
-    this.$staffFormDiv.classList.remove('hidden');
-  }
-
-  // ---------- private API ----------
-  // --- Schedules ---
-  
-  
+    
   // ---------- private API ----------
   #periodicDataFetch() {
     let ms = 60_000; 
