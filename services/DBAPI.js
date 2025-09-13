@@ -6,8 +6,8 @@ export default class DBAPI {
   }
 
   // ---------- public API ----------
-  fetchAllSchedules() {
-    return this.#requestWithTimeout(3000, '/schedules');
+  async fetchAllSchedules() {
+    return this.#requestWithTimeout(3000, `${this.url}/schedules`);
   }
 
   async createNewStaff(form, data) {
@@ -40,7 +40,7 @@ export default class DBAPI {
 
   async #requestWithTimeout(delay, path, requestInitObj = {}) {
     return await Promise.race([
-      fetch(`${this.url}${path}`, requestInitObj),
+      fetch(path, requestInitObj),
       this.timeoutPromise(delay),
     ]);
   }

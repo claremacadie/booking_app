@@ -1,5 +1,6 @@
 import DBAPI from '../services/DBAPI.js';
 import AppController from './appController.js';
+import TimeoutError from '../utils/timeoutError.js';
 
 // Import model classes
 import Schedule from '../model/schedule.js';
@@ -25,27 +26,38 @@ export default class App {
     this.staffForm = new StaffForm(this);
     this.appController = new AppController(this);
     
-    try {
-      // this.userMsg('Loading schedules');
-      // this.allSchedules = await this.#fetchAllSchedules();
-      // this.#displayAllSchedules();
-
-      this.displayStaffFormMode();
-
-      // this.#periodicDataFetch(); 
-    } catch(error) {
-      this.clearUserMsg();
-      this.handleError(error, 'Could not load schedules.');
-    }
+    this.displayAllSchedulesMode();
+    // this.displayStaffFormMode();
+    
   }
   
   // ---------- public API ----------
-  displayAllSchedulesMode() {
+  async displayAllSchedulesMode() {
     this.clearUserMsg();
     this.clearErrorMsg();
     this.$pageHeading.textContent = "Schedule List";
     this.$allSchedulesDiv.classList.remove('hidden');
-    this.$addStaffDiv.classList.add('hidden');
+    this.$staffFormDiv.classList.add('hidden');
+
+    this.userMsg('Loading schedules...');
+
+    // Gets a response object or a timeout error
+    let response = await this.DBAPI.fetchAllSchedules();
+
+    if (typeof(response) === TimeoutError) {
+      this.errorMsg("Request took too long, please try again.");
+      return;
+    }
+
+    if (response.status === 200) {
+      this.userMsg('Schedules finished loading.');
+      let jsonData = await response.json();
+      this.#displaySchedules(jsonData);
+      return;
+    }
+
+    this.errorMsg("Something went wrong, please refresh the page.");
+
   }
   
   displayStaffFormMode() {
@@ -74,30 +86,15 @@ export default class App {
 
   // ---------- private API ----------
   // --- Schedules ---
-  #displayAllSchedules() {
-    this.displayAllSchedulesMode();
-    let schedulesTally = this.allSchedules.length;
+  #displaySchedules(jsonData) {
+    this.allSchedules = [];
 
-    if (schedulesTally === 0) {
-      this.userMsg('There are currently no schedules available for booking.');
-    } else {
-      this.userMsg(`Schedules loaded successfully. There are ${this.allSchedules.length} schedules.`);
-      this.scheduleList = new ScheduleList(this);
-    }
-  }
-
-  async #fetchAllSchedules() {
-    let schedules = [];
-
-    let schedulesDataArr = await this.DBAPI.fetchAllSchedules();
-    schedulesDataArr.forEach (dataObj => {
-      let scheduleObj = new Schedule(dataObj);
-      schedules.push(scheduleObj)
+    jsonData.forEach(obj => {
+      this.allSchedules.push(new Schedule(obj));
     });
 
-    return schedules;
+    new ScheduleList(this);
   }
-
   // ---------- private API ----------
   #periodicDataFetch() {
     let ms = 60_000; 
@@ -116,7 +113,7 @@ export default class App {
 
 /*
 To do:
-  switch on response.status explicitly, like in the assignment’s solution, to handle 201 and 400 separately and parse JSON only when it’s a successful response. Otherwise, your approach matches the assignment’s goals well.
+  Check original allSchedules functionality works
 
   object to store divs
   Buttons, with eventListeners in header to switch between different views:
@@ -125,7 +122,5 @@ To do:
   Change default mode to be displayed for each part of the assignment
 
 Fudges:
-  App.handleError:
-    - this.displayErrorMessage(error.message.split(' — ')[1]);
   
 */
