@@ -28,7 +28,7 @@ export default class StaffForm {
     this.$form.action = this.app.url + '/staff_members';
     this.$form.method = 'POST';
 
-    this.$form.classList.add ('staff-form');
+    this.$form.classList.add ('form');
     this.app.$staffFormDiv.append(this.$form);
   }
 
