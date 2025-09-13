@@ -29,7 +29,7 @@ export default class App {
     this.appController = new AppController(this);
     
     try {
-      // this.displayUserMessage('Loading schedules');
+      // this.userMsg('Loading schedules');
       // this.allSchedules = await this.#fetchAllSchedules();
       // this.#displayAllSchedules();
 
@@ -55,7 +55,7 @@ export default class App {
     this.$staffFormDiv.classList.remove('hidden');
   }
 
-  displayUserMessage(msg) {
+  userMsg(msg) {
     this.$userMessage.textContent = msg;
   }
 
@@ -78,7 +78,7 @@ export default class App {
       this.displayErrorMessage(`Request failed (${error.status}): ${error.message}`);
       return;
     } else if (error?.name === 'AbortError') {
-      this.displayUserMessage('Request aborted.');
+      this.userMsg('Request aborted.');
     } else if (error instanceof TimeoutError) {
       this.displayErrorMessage(`${msg} Request timed out.`);
     } else {
@@ -94,9 +94,9 @@ export default class App {
     let schedulesTally = this.allSchedules.length;
 
     if (schedulesTally === 0) {
-      this.displayUserMessage('There are currently no schedules available for booking.');
+      this.userMsg('There are currently no schedules available for booking.');
     } else {
-      this.displayUserMessage(`Schedules loaded successfully. There are ${this.allSchedules.length} schedules.`);
+      this.userMsg(`Schedules loaded successfully. There are ${this.allSchedules.length} schedules.`);
       this.scheduleList = new ScheduleList(this);
     }
   }
