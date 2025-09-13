@@ -26,13 +26,12 @@ export default class App {
     this.staffForm = new StaffForm(this);
     this.appController = new AppController(this);
     
-    this.displayAllSchedulesMode();
-    // this.displayStaffFormMode();
-    
+    this.displaySchedules();
+    // this.displayStaffForm();
   }
   
   // ---------- public API ----------
-  async displayAllSchedulesMode() {
+  async displaySchedules() {
     this.clearUserMsg();
     this.clearErrorMsg();
     this.$pageHeading.textContent = "Schedule List";
@@ -40,27 +39,10 @@ export default class App {
     this.$staffFormDiv.classList.add('hidden');
 
     this.userMsg('Loading schedules...');
-
-    // Gets a response object or a timeout error
-    let response = await this.DBAPI.fetchAllSchedules();
-
-    if (typeof(response) === TimeoutError) {
-      this.errorMsg("Request took too long, please try again.");
-      return;
-    }
-
-    if (response.status === 200) {
-      this.userMsg('Schedules finished loading.');
-      let jsonData = await response.json();
-      this.#displaySchedules(jsonData);
-      return;
-    }
-
-    this.errorMsg("Something went wrong, please refresh the page.");
-
+    this.#loadSchedules();
   }
   
-  displayStaffFormMode() {
+  displayStaffForm() {
     this.clearUserMsg();
     this.clearErrorMsg();
     this.$pageHeading.textContent = "Add Staff";
@@ -86,15 +68,33 @@ export default class App {
 
   // ---------- private API ----------
   // --- Schedules ---
-  #displaySchedules(jsonData) {
+  async #loadSchedules() {
+    try {
+      let response = await this.DBAPI.fetchAllSchedules();
+      if (response.status !== 200) throw new Error("Something went wrong, please try again");
+      this.userMsg('Schedules finished loading.');
+      let jsonData = await response.json();
+      this.#listSchedules(jsonData);
+    } catch(error) {
+      this.clearUserMsg();
+      this.errorMsg(error.message);
+    }
+  }
+
+  #listSchedules(jsonData) {
     this.allSchedules = [];
 
     jsonData.forEach(obj => {
       this.allSchedules.push(new Schedule(obj));
     });
 
-    new ScheduleList(this);
+    if (this.allSchedules.length === 0) {
+      this.userMsg("Currently, no schedules are available for booking.")
+    } else {
+      new ScheduleList(this);
+    }
   }
+  
   // ---------- private API ----------
   #periodicDataFetch() {
     let ms = 60_000; 

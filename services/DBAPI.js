@@ -32,7 +32,7 @@ export default class DBAPI {
   
   timeoutPromise(ms) {
     return new Promise((_, reject) => {
-      setTimeout(() => reject(new TimeoutError('It is taking longer than usual, please try again later.')), ms);
+      setTimeout(() => reject(new TimeoutError()), ms);
     });
   }
 
