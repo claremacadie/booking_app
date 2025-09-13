@@ -19,8 +19,8 @@ export default class App {
     this.$pageHeading = document.getElementById("page-heading");
     this.$allSchedulesDiv = document.getElementById("all-schedules");
     this.$staffFormDiv = document.getElementById("staff-form");
-    this.$userMessage = document.getElementById("user-message");
-    this.$errorMessage = document.getElementById("error-message");
+    this.$userMsg = document.getElementById("user-message");
+    this.$errorMsg = document.getElementById("error-message");
 
     this.DBAPI = new DBAPI(this.url);
     this.staffForm = new StaffForm(this);
@@ -51,19 +51,19 @@ export default class App {
   }
 
   userMsg(msg) {
-    this.$userMessage.textContent = msg;
+    this.$userMsg.textContent = msg;
   }
 
   errorMsg(msg) {
-    this.$errorMessage.textContent = msg;
+    this.$errorMsg.textContent = msg;
   }
 
   clearUserMsg() {
-    this.$userMessage.textContent = '';
+    this.$userMsg.textContent = '';
   }
   
   clearErrorMsg() {
-    this.$errorMessage.textContent = '';
+    this.$errorMsg.textContent = '';
   }
 
   // ---------- private API ----------
@@ -78,6 +78,8 @@ export default class App {
     } catch(error) {
       this.clearUserMsg();
       this.errorMsg(error.message);
+    } finally {
+      this.userMsg(`${this.$userMsg.textContent} The request has completed.`)
     }
   }
 
@@ -113,8 +115,6 @@ export default class App {
 
 /*
 To do:
-  Check original allSchedules functionality works
-
   object to store divs
   Buttons, with eventListeners in header to switch between different views:
     - displayAllSchedulesMode
