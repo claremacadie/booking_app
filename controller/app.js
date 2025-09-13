@@ -44,16 +44,16 @@ export default class App {
   
   // ---------- public API ----------
   displayAllSchedulesMode() {
-    this.clearUserMessage();
-    this.clearErrorMessage();
+    this.clearUserMsg();
+    this.clearErrorMsg();
     this.$pageHeading.textContent = "Schedule List";
     this.$allSchedulesDiv.classList.remove('hidden');
     this.$addStaffDiv.classList.add('hidden');
   }
   
   displayStaffFormMode() {
-    this.clearUserMessage();
-    this.clearErrorMessage();
+    this.clearUserMsg();
+    this.clearErrorMsg();
     this.$pageHeading.textContent = "Add Staff";
     this.$allSchedulesDiv.classList.add('hidden');
     this.$staffFormDiv.classList.remove('hidden');
@@ -63,33 +63,16 @@ export default class App {
     this.$userMessage.textContent = msg;
   }
 
-  displayErrorMessage(msg) {
+  errorMsg(msg) {
     this.$errorMessage.textContent = msg;
   }
 
-  clearUserMessage() {
+  clearUserMsg() {
     this.$userMessage.textContent = '';
   }
   
-  clearErrorMessage() {
+  clearErrorMsg() {
     this.$errorMessage.textContent = '';
-  }
-
-  handleError(error, msg='Something went wrong.') {
-    if (error instanceof ValidationError) {
-      this.displayErrorMessage(error.message);
-    } else if (error instanceof HttpError) {
-      console.log(`Request failed (${error.status}): ${error.message}`);
-      this.displayErrorMessage(error.message.split(' — ')[1]);
-      return;
-    } else if (error?.name === 'AbortError') {
-      this.userMsg('Request aborted.');
-    } else if (error instanceof TimeoutError) {
-      this.displayErrorMessage(`${msg} Request timed out.`);
-    } else {
-      console.error(error);
-      this.displayErrorMessage(msg);
-    }
   }
 
   // ---------- private API ----------
@@ -137,6 +120,8 @@ export default class App {
 
 /*
 To do:
+  switch on response.status explicitly, like in the assignment’s solution, to handle 201 and 400 separately and parse JSON only when it’s a successful response. Otherwise, your approach matches the assignment’s goals well.
+
   object to store divs
   Buttons, with eventListeners in header to switch between different views:
     - displayAllSchedulesMode

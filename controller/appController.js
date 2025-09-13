@@ -23,15 +23,16 @@ export default class AppController {
   async #handleStaffFormSubmit(event) {
     event.preventDefault();
     let form = event.target;
-    this.app.clearUserMessage();
-    this.app.clearErrorMessage();
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
 
     let data = this.#formatData(this.#extractData(form));
     try {
       let response = await this.app.DBAPI.createNewStaff(form, data);
       this.app.userMsg(`Successfully created staff with id: ${response.id}`);
     } catch(error) {
-      this.app.handleError(error);
+      console.log(error);
+      this.app.errorMsg('Staff cannot be created. Check your inputs.');
     }
   }
   // ---------- helpers ----------
