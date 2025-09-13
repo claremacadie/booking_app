@@ -14,14 +14,15 @@ export default class ScheduleList {
 
   // ---------- private API ----------
   #createHTML() {
-    this.app.allSchedules.forEach(schedule => {
+    this.app.schedules.forEach(schedule => {
       this.$ul.append(schedule.$li);
     });
   }
 
   #configureHTML() {
     this.$ul.classList.add('schedule-list');
-    this.app.$allSchedulesDiv.append(this.$ul);
+    console.log(this.app);
+    this.app.$schedulesDiv.append(this.$ul);
   }
 
   // ---------- helpers ----------

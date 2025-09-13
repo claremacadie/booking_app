@@ -2,12 +2,9 @@ import DBAPI from '../services/DBAPI.js';
 import AppController from './appController.js';
 import TimeoutError from '../utils/timeoutError.js';
 
-// Import model classes
-import Schedule from '../model/schedule.js';
-
 // Import view classes
+import Schedule from '../model/schedule.js';
 import StaffForm from '../view/staffForm.js';
-import ScheduleList from '../view/scheduleList.js';
 
 export default class App {
   constructor(url) {
@@ -17,39 +14,23 @@ export default class App {
   
   async #init() {
     this.$pageHeading = document.getElementById("page-heading");
-    this.$allSchedulesDiv = document.getElementById("all-schedules");
+    this.$schedulesDiv = document.getElementById("schedules");
     this.$staffFormDiv = document.getElementById("staff-form");
     this.$userMsg = document.getElementById("user-message");
     this.$errorMsg = document.getElementById("error-message");
+    this.$schedulesBtn = document.getElementById("schedules-btn");
+    this.$staffFormBtn = document.getElementById("staff-form-btn");
 
     this.DBAPI = new DBAPI(this.url);
     this.staffForm = new StaffForm(this);
     this.appController = new AppController(this);
     
-    this.displaySchedules();
+    // Set default view
+    this.appController.displaySchedules();
     // this.displayStaffForm();
   }
   
-  // ---------- public API ----------
-  async displaySchedules() {
-    this.clearUserMsg();
-    this.clearErrorMsg();
-    this.$pageHeading.textContent = "Schedule List";
-    this.$allSchedulesDiv.classList.remove('hidden');
-    this.$staffFormDiv.classList.add('hidden');
-
-    this.userMsg('Loading schedules...');
-    this.#loadSchedules();
-  }
-  
-  displayStaffForm() {
-    this.clearUserMsg();
-    this.clearErrorMsg();
-    this.$pageHeading.textContent = "Add Staff";
-    this.$allSchedulesDiv.classList.add('hidden');
-    this.$staffFormDiv.classList.remove('hidden');
-  }
-
+  // ---------- public API ----------  
   userMsg(msg) {
     this.$userMsg.textContent = msg;
   }
@@ -66,15 +47,20 @@ export default class App {
     this.$errorMsg.textContent = '';
   }
 
-  // ---------- private API ----------
   // --- Schedules ---
-  async #loadSchedules() {
+  async loadSchedules() {
     try {
-      let response = await this.DBAPI.fetchAllSchedules();
+      let response = await this.DBAPI.fetchSchedules();
       if (response.status !== 200) throw new Error("Something went wrong, please try again");
       this.userMsg('Schedules finished loading.');
       let jsonData = await response.json();
-      this.#listSchedules(jsonData);
+
+      this.schedules = [];
+
+      jsonData.forEach(obj => {
+        this.schedules.push(new Schedule(obj));
+      });
+      this.appController.listSchedules();
     } catch(error) {
       this.clearUserMsg();
       this.errorMsg(error.message);
@@ -83,19 +69,18 @@ export default class App {
     }
   }
 
-  #listSchedules(jsonData) {
-    this.allSchedules = [];
-
-    jsonData.forEach(obj => {
-      this.allSchedules.push(new Schedule(obj));
-    });
-
-    if (this.allSchedules.length === 0) {
-      this.userMsg("Currently, no schedules are available for booking.")
-    } else {
-      new ScheduleList(this);
-    }
+  // --- Staff Form ---
+  displayStaffForm() {
+    this.clearUserMsg();
+    this.clearErrorMsg();
+    this.$pageHeading.textContent = "Add Staff";
+    this.$schedulesDiv.classList.add('hidden');
+    this.$staffFormDiv.classList.remove('hidden');
   }
+
+  // ---------- private API ----------
+  // --- Schedules ---
+  
   
   // ---------- private API ----------
   #periodicDataFetch() {

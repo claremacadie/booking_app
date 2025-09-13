@@ -6,7 +6,7 @@ export default class DBAPI {
   }
 
   // ---------- public API ----------
-  async fetchAllSchedules() {
+  async fetchSchedules() {
     return this.#requestWithTimeout(3000, `${this.url}/schedules`);
   }
 
