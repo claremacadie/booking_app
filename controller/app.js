@@ -1,10 +1,10 @@
 import DBAPI from '../services/DBAPI.js';
 import AppController from './appController.js';
-import TimeoutError from '../utils/timeoutError.js';
 
 // Import view classes
 import Schedule from '../model/schedule.js';
 import StaffForm from '../view/staffForm.js';
+import SchedulesForm from '../view/schedulesForm.js';
 
 export default class App {
   constructor(url) {
@@ -16,13 +16,16 @@ export default class App {
     this.$pageHeading = document.getElementById("page-heading");
     this.$schedulesDiv = document.getElementById("schedules");
     this.$staffFormDiv = document.getElementById("staff-form");
+    this.$schedulesFormDiv = document.getElementById("schedules-form");
     this.$userMsg = document.getElementById("user-message");
     this.$errorMsg = document.getElementById("error-message");
     this.$schedulesBtn = document.getElementById("schedules-btn");
     this.$staffFormBtn = document.getElementById("staff-form-btn");
+    this.$schedulesFormBtn = document.getElementById("schedules-form-btn");
 
     this.DBAPI = new DBAPI(this.url);
     this.staffForm = new StaffForm(this);
+    this.schedulesForm = new SchedulesForm(this);
     this.appController = new AppController(this);
   }
   

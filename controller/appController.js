@@ -10,13 +10,14 @@ export default class AppController {
   #init() {
     this.$staffForm = this.app.staffForm.$form;
     // Set default view
-    this.#displayStaffForm();
+    this.#displaySchedulesForm();
   } 
 
   #bind() {
     this.$staffForm.addEventListener('submit', this.#handleStaffFormSubmit.bind(this));
     this.app.$schedulesBtn.addEventListener('click', this.#handleSchedulesBtn.bind(this));
     this.app.$staffFormBtn.addEventListener('click', this.#handleStaffFormBtn.bind(this));
+    this.app.$schedulesFormBtn.addEventListener('click', this.#handleSchedulesFormBtn.bind(this));
   }
 
   // ---------- Private API ----------
@@ -29,6 +30,7 @@ export default class AppController {
     this.app.$pageHeading.textContent = "Schedule List";
     this.app.$schedulesDiv.classList.remove('hidden');
     this.app.$staffFormDiv.classList.add('hidden');
+    this.app.$schedulesFormDiv.classList.add('hidden');
     
     this.app.userMsg('Loading schedules...');
     await this.app.loadSchedules();
@@ -43,6 +45,17 @@ export default class AppController {
     this.app.$pageHeading.textContent = "Add Staff";
     this.app.$schedulesDiv.classList.add('hidden');
     this.app.$staffFormDiv.classList.remove('hidden');
+    this.app.$schedulesFormDiv.classList.add('hidden');
+  }
+  
+  // --- Schedules Form ---
+  #displaySchedulesForm() {
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
+    this.app.$pageHeading.textContent = "Add Schedules";
+    this.app.$schedulesDiv.classList.add('hidden');
+    this.app.$staffFormDiv.classList.add('hidden');
+    this.app.$schedulesFormDiv.classList.remove('hidden');
   }
 
   // ---------- Private handlers ----------
@@ -54,6 +67,11 @@ export default class AppController {
   #handleStaffFormBtn(event) {
     event.preventDefault();
     this.#displayStaffForm();
+  }
+  
+  #handleSchedulesFormBtn(event) {
+    event.preventDefault();
+    this.#displaySchedulesForm();
   }
 
   async #handleStaffFormSubmit(event) {
