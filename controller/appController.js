@@ -81,7 +81,7 @@ export default class AppController {
     this.app.clearErrorMsg();
 
     let data = this.#formatData(this.#extractData(form));
-    this.#sendData(form, data);
+    this.#sendStaffData(form, data);
   }
 
   // ---------- helpers ----------
@@ -106,7 +106,7 @@ export default class AppController {
     return JSON.stringify(data);
   }
 
-  async #sendData(form, data) {
+  async #sendStaffData(form, data) {
     try {
       let response = await this.app.DBAPI.createNewStaff(form, data);
 

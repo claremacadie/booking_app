@@ -14,6 +14,14 @@ h2 {
   font-size: 20px;
 }
 
+/* Messages */
+#error-message {
+  background-color: rgb(241, 187, 205);
+}
+#user-message {
+  background-color: rgb(202, 245, 202);
+}
+
 /* Schedule list */
 .schedule-list > li {
   padding: 4px 0;

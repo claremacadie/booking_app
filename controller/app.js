@@ -83,8 +83,3 @@ export default class App {
     }, ms);
   }
 }
-
-/*
-To do:
-  
-*/
