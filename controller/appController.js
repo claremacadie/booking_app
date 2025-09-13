@@ -23,6 +23,7 @@ export default class AppController {
   // ---------- Public API ----------
   // --- Schedules ---
   displaySchedules() {
+    this.app.$schedulesDiv.innerHTML = '';
     this.app.clearUserMsg();
     this.app.clearErrorMsg();
     
@@ -32,14 +33,6 @@ export default class AppController {
     
     this.app.userMsg('Loading schedules...');
     this.app.loadSchedules();
-  }
-
-  listSchedules() {
-    if (this.app.schedules.length === 0) {
-      this.app.userMsg("There are currently no schedules are available for booking.")
-    } else {
-      new ScheduleList(this.app);
-    }
   }
 
   // ---------- Private handlers ----------
@@ -80,8 +73,14 @@ export default class AppController {
 
   // ---------- helpers ----------
   // --- Schedules ---
+  listSchedules() {
+    if (this.app.schedules.length === 0) {
+      this.app.userMsg("There are currently no schedules are available for booking.")
+    } else {
+      new ScheduleList(this.app);
+    }
+  }
   
-
   // --- Staff Form ---
   #extractData(formElement) {
     let formData = new FormData(formElement);
