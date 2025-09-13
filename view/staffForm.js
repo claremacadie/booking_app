@@ -12,9 +12,6 @@ export default class StaffForm {
     this.#configureHTML();
   }
 
-  // ---------- public API ----------
-  
-
   // ---------- private API ----------
   #createHTML() {
     let dl = document.createElement('dl');

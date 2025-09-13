@@ -17,31 +17,18 @@ export default class DBAPI {
       body: data,
     });
   }
-
-  updateData(data, id) {
-    return this.#requestWithTimeout(5000, `${this.path}/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: data,
-    });
-  }
-
-  deleteData(id) {
-    return this.#requestWithTimeout(5000, `${this.path}/${id}`, { method: 'DELETE' }, false);
-  }
   
-  timeoutPromise(ms) {
-    return new Promise((_, reject) => {
-      setTimeout(() => reject(new TimeoutError()), ms);
-    });
-  }
-
   // ---------- private API ----------
-
   async #requestWithTimeout(delay, path, requestInitObj = {}) {
     return await Promise.race([
       fetch(path, requestInitObj),
-      this.timeoutPromise(delay),
+      this.#timeoutPromise(delay),
     ]);
+  }
+  
+  #timeoutPromise(ms) {
+    return new Promise((_, reject) => {
+      setTimeout(() => reject(new TimeoutError()), ms);
+    });
   }
 }

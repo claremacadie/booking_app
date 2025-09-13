@@ -10,8 +10,6 @@ export default class ScheduleList {
     this.#configureHTML();
   }
 
-  // ---------- public API ----------
-
   // ---------- private API ----------
   #createHTML() {
     this.app.schedules.forEach(schedule => {
@@ -21,10 +19,6 @@ export default class ScheduleList {
 
   #configureHTML() {
     this.$ul.classList.add('schedule-list');
-    console.log(this.app);
     this.app.$schedulesDiv.append(this.$ul);
-  }
-
-  // ---------- helpers ----------
-   
+  }   
 }

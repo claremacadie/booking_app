@@ -21,7 +21,7 @@ export default class AppController {
 
   // ---------- Private API ----------
   // --- Schedules ---
-  #displaySchedules() {
+  async #displaySchedules() {
     this.app.$schedulesDiv.innerHTML = '';
     this.app.clearUserMsg();
     this.app.clearErrorMsg();
@@ -31,7 +31,9 @@ export default class AppController {
     this.app.$staffFormDiv.classList.add('hidden');
     
     this.app.userMsg('Loading schedules...');
-    this.app.loadSchedules();
+    await this.app.loadSchedules();
+    
+    if (this.app.schedules) this.#listSchedules();
   }
 
   // --- Staff Form ---
@@ -61,6 +63,32 @@ export default class AppController {
     this.app.clearErrorMsg();
 
     let data = this.#formatData(this.#extractData(form));
+    this.#sendData(form, data);
+  }
+
+  // ---------- helpers ----------
+  // --- Schedules ---
+  #listSchedules() {
+    if (this.app.schedules.length === 0) {
+      this.app.userMsg("There are currently no schedules available for booking.")
+    } else {
+      new ScheduleList(this.app);
+    }
+  }
+  
+  // --- Staff Form ---
+  #extractData(formElement) {
+    let formData = new FormData(formElement);
+    let data = Object.fromEntries(formData.entries());
+    for (let key in data) {data[key] = data[key].trim()};
+    return data;
+  }
+
+  #formatData(data) {
+    return JSON.stringify(data);
+  }
+
+  async #sendData(form, data) {
     try {
       let response = await this.app.DBAPI.createNewStaff(form, data);
 
@@ -77,31 +105,5 @@ export default class AppController {
     } catch(error) {
       this.app.errorMsg(error.message);
     }
-  }
-
-  // ---------- helpers ----------
-  // --- Schedules ---
-  listSchedules() {
-    if (this.app.schedules.length === 0) {
-      this.app.userMsg("There are currently no schedules are available for booking.")
-    } else {
-      new ScheduleList(this.app);
-    }
-  }
-  
-  // --- Staff Form ---
-  #extractData(formElement) {
-    let formData = new FormData(formElement);
-    let data = Object.fromEntries(formData.entries());
-
-    for (let key in data) {
-      data[key] = data[key].trim();
-    }
-    
-    return data;
-  }
-
-  #formatData(data) {
-    return JSON.stringify(data);
   }
 }

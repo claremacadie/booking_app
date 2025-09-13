@@ -45,6 +45,7 @@ export default class App {
 
   // --- Schedules ---
   async loadSchedules() {
+    this.schedules = null;
     try {
       let response = await this.DBAPI.fetchSchedules();
       if (response.status !== 200) throw new Error("Something went wrong, please try again");
@@ -56,7 +57,6 @@ export default class App {
       jsonData.forEach(obj => {
         this.schedules.push(new Schedule(obj));
       });
-      this.appController.listSchedules();
     } catch(error) {
       this.clearUserMsg();
       this.errorMsg(error.message);
@@ -83,12 +83,5 @@ export default class App {
 
 /*
 To do:
-  object to store divs
-  Buttons, with eventListeners in header to switch between different views:
-    - displayAllSchedulesMode
-    - displayStaffFormMode
-  Change default mode to be displayed for each part of the assignment
-
-Fudges:
   
 */
