@@ -11,9 +11,10 @@ export default class DBAPI {
     return this.#requestWithTimeout(3000, '/schedules');
   }
 
-  postData(data) {
-    return this.#requestWithTimeout(5000, this.path, {
-      method: 'POST',
+  createNewStaff(form, data) {
+    console.log(form.method, form.action);
+    return this.#requestWithTimeout(5000, form.action, {
+      method: form.method,
       headers: { 'Content-Type': 'application/json' },
       body: data,
     });
@@ -40,7 +41,7 @@ export default class DBAPI {
   // ---------- private API ----------
   async #requestWithTimeout(delay, path, requestInitObj = {}, expectJson = true) {
     const res = await Promise.race([
-      fetch(`${this.url}${path}`, requestInitObj),
+      fetch(path, requestInitObj),
       this.timeoutPromise(delay),
     ]);
 

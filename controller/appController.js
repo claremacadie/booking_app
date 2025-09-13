@@ -20,21 +20,19 @@ export default class AppController {
   // ---------- Public handlers ----------
 
   // ---------- Private handlers ----------
-  #handleStaffFormSubmit(event) {
+  async #handleStaffFormSubmit(event) {
     event.preventDefault();
+    let form = event.target;
     this.app.clearUserMessage();
     this.app.clearErrorMessage();
 
-    let inputData = this.#extractData(event.target);
-    if (this.#invalidData(inputData)) {
-      this.app.userMsg('Staff cannot be created. Check your inputs.');
-      return;
+    let data = this.#formatData(this.#extractData(form));
+    try {
+      let response = await this.app.DBAPI.createNewStaff(form, data);
+      this.app.userMsg(`Successfully created staff with id: ${response.id}`);
+    } catch(error) {
+      this.app.handleError(error);
     }
-
-    //   - Fetch request: path = '/staff_members', fields `name` and `email`
-    //   - success = 201, {id: 14}
-    //   - error = 4xx "Staff can not be created. Check your inputs."
-    //   - Success message: Successfully created staff with id: 14
   }
   // ---------- helpers ----------
   #extractData(formElement) {
@@ -48,11 +46,7 @@ export default class AppController {
     return data;
   }
 
-  #invalidData(data) {
-    return Object.keys(data).some(key => data[key] == '');
-  }
-
-  #formatDataToSend(data) {
+  #formatData(data) {
     return JSON.stringify(data);
   }
 }

@@ -44,12 +44,16 @@ export default class App {
   
   // ---------- public API ----------
   displayAllSchedulesMode() {
+    this.clearUserMessage();
+    this.clearErrorMessage();
     this.$pageHeading.textContent = "Schedule List";
     this.$allSchedulesDiv.classList.remove('hidden');
     this.$addStaffDiv.classList.add('hidden');
   }
   
   displayStaffFormMode() {
+    this.clearUserMessage();
+    this.clearErrorMessage();
     this.$pageHeading.textContent = "Add Staff";
     this.$allSchedulesDiv.classList.add('hidden');
     this.$staffFormDiv.classList.remove('hidden');
@@ -75,7 +79,8 @@ export default class App {
     if (error instanceof ValidationError) {
       this.displayErrorMessage(error.message);
     } else if (error instanceof HttpError) {
-      this.displayErrorMessage(`Request failed (${error.status}): ${error.message}`);
+      console.log(`Request failed (${error.status}): ${error.message}`);
+      this.displayErrorMessage(error.message.split(' — ')[1]);
       return;
     } else if (error?.name === 'AbortError') {
       this.userMsg('Request aborted.');
@@ -138,15 +143,8 @@ To do:
     - displayStaffFormMode
   Change default mode to be displayed for each part of the assignment
 
-  Create staffForm class:
-    - Event handler in appcontroller
-      - Validate inputs - none empty
-      - Error message: Staff cannot be created. Check your inputs.
-      - Fetch request: path = '/staff_members', fields `name` and `email`
-      - success = 201, {id: 14}
-      - error = 4xx "Staff can not be created. Check your inputs."
-      - Success message: Successfully created staff with id: 14
-
-
+Fudges:
+  App.handleError:
+    - this.displayErrorMessage(error.message.split(' — ')[1]);
   
 */
