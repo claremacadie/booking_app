@@ -29,12 +29,22 @@ export default class AppController {
     let data = this.#formatData(this.#extractData(form));
     try {
       let response = await this.app.DBAPI.createNewStaff(form, data);
-      this.app.userMsg(`Successfully created staff with id: ${response.id}`);
+
+      switch (response.status) {
+        case 400:
+          throw new Error('Staff cannot be created. Check your inputs.');
+        case 201:
+          let responseJson = await response.json();
+          this.app.userMsg(`Successfully created staff with id: ${responseJson.id}`);
+          break;
+        default:
+          throw new Error('Something went wrong.')
+      }
     } catch(error) {
-      console.log(error);
-      this.app.errorMsg('Staff cannot be created. Check your inputs.');
+      this.app.errorMsg(error.message);
     }
   }
+
   // ---------- helpers ----------
   #extractData(formElement) {
     let formData = new FormData(formElement);

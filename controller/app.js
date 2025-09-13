@@ -1,8 +1,5 @@
 import DBAPI from '../services/DBAPI.js';
 import AppController from './appController.js';
-import ValidationError from '../utils/validationError.js';
-import TimeoutError from '../utils/timeoutError.js';
-import HttpError from '../utils/httpError.js';
 
 // Import model classes
 import Schedule from '../model/schedule.js';
@@ -37,7 +34,7 @@ export default class App {
 
       // this.#periodicDataFetch(); 
     } catch(error) {
-      this.clearUserMessage();
+      this.clearUserMsg();
       this.handleError(error, 'Could not load schedules.');
     }
   }
@@ -102,7 +99,6 @@ export default class App {
   }
 
   // ---------- private API ----------
-
   #periodicDataFetch() {
     let ms = 60_000; 
     this.refreshing = false;
