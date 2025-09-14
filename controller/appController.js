@@ -69,7 +69,7 @@ export default class AppController {
     this.app.clearErrorMsg();
     
     this.app.$pageHeading.textContent = "Book a Schedule";
-    this.app.$schedulesDiv.classList.remove('hidden');
+    this.app.$schedulesDiv.classList.add('hidden');
     this.app.$staffFormDiv.classList.add('hidden');
     this.app.$schedulesFormDiv.classList.add('hidden');
     this.app.$bookingFormDiv.classList.remove('hidden');
