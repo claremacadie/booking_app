@@ -26,8 +26,8 @@ export default class AppController {
   // ---------- Private API ----------
   async #displaySchedules() {
     this.app.$schedulesDiv.innerHTML = '';
-    this.app.clearUserMsg();
-    this.app.clearErrorMsg();
+    // this.app.clearUserMsg();
+    // this.app.clearErrorMsg();
     
     this.app.$pageHeading.textContent = "Schedule List";
     this.app.$schedulesDiv.classList.remove('hidden');
@@ -42,8 +42,8 @@ export default class AppController {
   }
   
   #displayStaffForm() {
-    this.app.clearUserMsg();
-    this.app.clearErrorMsg();
+    // this.app.clearUserMsg();
+    // this.app.clearErrorMsg();
     this.app.$pageHeading.textContent = "Add Staff";
     this.app.$schedulesDiv.classList.add('hidden');
     this.app.$staffFormDiv.classList.remove('hidden');
@@ -52,8 +52,8 @@ export default class AppController {
   }
   
   #displaySchedulesForm() {
-    this.app.clearUserMsg();
-    this.app.clearErrorMsg();
+    // this.app.clearUserMsg();
+    // this.app.clearErrorMsg();
     this.app.$pageHeading.textContent = "Add Schedules";
     this.app.$schedulesDiv.classList.add('hidden');
     this.app.$staffFormDiv.classList.add('hidden');
@@ -64,8 +64,8 @@ export default class AppController {
   
   
   async #displayBookingForm() {
-    this.app.clearUserMsg();
-    this.app.clearErrorMsg();
+    // this.app.clearUserMsg();
+    // this.app.clearErrorMsg();
     
     this.app.$pageHeading.textContent = "Book a Schedule";
     this.app.$schedulesDiv.classList.add('hidden');
@@ -73,33 +73,42 @@ export default class AppController {
     this.app.$schedulesFormDiv.classList.add('hidden');
     this.app.$bookingFormDiv.classList.remove('hidden');
     
-    this.app.userMsg('Loading schedules...');
     await this.app.loadSchedules();
   }
 
   // ---------- Private handlers ----------
   #handleSchedulesBtn(event) {
     event.preventDefault();
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
     this.#displaySchedules();
   }
   
   #handleStaffFormBtn(event) {
     event.preventDefault();
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
     this.#displayStaffForm();
   }
   
   #handleSchedulesFormBtn(event) {
     event.preventDefault();
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
     this.#displaySchedulesForm();
   }
   
   #handleBookingFormBtn(event) {
     event.preventDefault();
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
     this.#displayBookingForm();
   }
 
   async #handleStaffFormSubmit(event) {
     event.preventDefault();
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
     let form = event.target;
     this.app.clearUserMsg();
     this.app.clearErrorMsg();
@@ -110,6 +119,8 @@ export default class AppController {
 
   #handleAddSchedulesBtn(event) {
     event.preventDefault();
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
     this.app.schedulesForm.addScheduleFieldset();
   }
 

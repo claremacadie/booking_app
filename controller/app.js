@@ -39,11 +39,11 @@ export default class App {
   
   // ---------- public API ----------  
   userMsg(msg) {
-    this.$userMsg.textContent = msg;
+    this.$userMsg.textContent = this.$userMsg.textContent + ' ' + msg;
   }
 
   errorMsg(msg) {
-    this.$errorMsg.textContent = msg;
+    this.$errorMsg.textContent = this.$errorMsg.textContent + ' ' + msg;
   }
 
   clearUserMsg() {
@@ -56,6 +56,7 @@ export default class App {
 
   // --- Schedules ---
   async loadSchedules() {
+    this.userMsg('Loading schedules.');
     try {
       let response = await this.DBAPI.fetchSchedules();
       if (response.status !== 200) throw new Error("Something went wrong, please try again");
@@ -71,16 +72,17 @@ export default class App {
       if (this.schedules) {
         this.userMsg("Using cached schedule data.")
       } else {
-        this.clearUserMsg();
+        // this.clearUserMsg();
       }
-      this.errorMsg(error.message);
+      this.errorMsg(`Loading schedules: ${error.message}`);
     } finally {
-      this.userMsg(`${this.$userMsg.textContent} The schedule request has completed.`)
+      this.userMsg("The schedule request has completed.")
     }
   }
 
   // --- Staff ---
   async fetchStaff() {
+    this.userMsg('Loading staff.');
     try {
       let response = await this.DBAPI.fetchStaff();
       if (response.status !== 200) throw new Error("Something went wrong, please try again");
@@ -95,11 +97,11 @@ export default class App {
       if (this.staff) {
         this.userMsg("Using cached staff data.")
       } else {
-        this.clearUserMsg();
+        // this.clearUserMsg();
       }
-      this.errorMsg(error.message);
+      this.errorMsg(`Loading staff: ${error.message}`);
     } finally {
-      this.userMsg(`${this.$userMsg.textContent} The staff request has completed.`)
+      this.userMsg("The staff request has completed.")
     }
   }
     
