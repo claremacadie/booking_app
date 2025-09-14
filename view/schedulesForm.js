@@ -68,7 +68,7 @@ export default class SchedulesForm {
     let staffSelect = document.createElement('select');
     staffSelect.setAttribute('id', `staff_${id}`);
     staffSelect.setAttribute('name', `staff_${id}`);
-    staffSelect.innerHTML = this.staffOptions;
+    this.staffOptions.forEach(option => staffSelect.append(option));
 
     staffDiv.append(staffLabel, staffSelect);
     return staffDiv;
@@ -109,11 +109,22 @@ export default class SchedulesForm {
   }
 
   #createStaffOptions() {
-    this.staffOptions = '<option value="1">Fae Kassulke V</option><option value="2">Aaron Nitzsche</option><option value="3">Gia Rice</option><option value="4">Esperanza Doyle</option><option value="5">Lacey Kautzer I</option>';
+    this.staffOptions = [];
+    Object.keys(this.app.staff).forEach(id => {
+      let option = this.#createOption(id, this.app.staff[id].name);
+      this.staffOptions.push(option);
+    });
+  }
+
+  #createOption(staffId, staffName) {
+    let option = document.createElement('option');
+    option.value = staffId;
+    option.textContent = staffName;
+    return option;
   }
 
   #getStaffNameById(id) {
-    return this.app.staff[1].name;
+    return this.app.staff[id].name;
   }
 }
 
@@ -130,8 +141,6 @@ Behaviour:
     - Existing forms reset, no forms deleted
 
 To do:
-  Create staff options
-
   Listener for addMoreSchedules: (appController)
     Add new fieldset to schedulesForm (SchedulesForm)
 
@@ -150,5 +159,11 @@ To do:
               }
           ]
         }
+
     Reset individual schedules forms, do not delete any
+
+    Every time the Add schedules button is clicked:
+      - reload staff and staffOptions
+
+    When adding schedule fieldsets, use same staffOptions (even if db updated with new staff)
 */
