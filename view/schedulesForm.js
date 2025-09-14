@@ -147,24 +147,6 @@ Behaviour:
     - Existing forms reset, no forms deleted
 
 To do:
-  Listener for submit schedules: (appController)
-    Extract data
-    Validate for empty fields "Please check your inputs, with an alert"
-    Format data
-    Send data  "Schedules added" 
-      - POST, /schedules
-      - {
-          "schedules": [
-              {
-                  "staff_id": 1,
-                  "date": "10-10-10",
-                  "time": "12:12"
-              }
-          ]
-        }
-
-    Reset individual schedules forms, do not delete any
-
     Every time the Add schedules button is clicked:
       - reload staff and staffOptions
 

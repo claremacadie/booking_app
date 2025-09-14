@@ -21,6 +21,14 @@ export default class DBAPI {
   async fetchStaff() {
     return this.#requestWithTimeout(3000, `${this.url}/staff_members`);
   }
+
+  async addSchedules(form, data) {
+    return await fetch(form.action, {
+      method: form.method,
+      headers: { 'Content-Type': 'application/json' },
+      body: data,
+    });
+  }
   
   // ---------- private API ----------
   async #requestWithTimeout(delay, path, requestInitObj = {}) {

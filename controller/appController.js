@@ -19,6 +19,7 @@ export default class AppController {
     this.app.$staffFormBtn.addEventListener('click', this.#handleStaffFormBtn.bind(this));
     this.app.$schedulesFormBtn.addEventListener('click', this.#handleSchedulesFormBtn.bind(this));
     this.app.schedulesForm.$addSchedulesBtn.addEventListener('click', this.#handleAddSchedulesBtn.bind(this))
+    this.app.schedulesForm.$form.addEventListener('submit', this.#handleScheduleFormSubmit.bind(this))
   }
 
   // ---------- Private API ----------
@@ -90,6 +91,16 @@ export default class AppController {
     this.app.schedulesForm.addScheduleFieldset();
   }
 
+  #handleScheduleFormSubmit(event) {
+    event.preventDefault();
+    let form = event.target;
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
+
+    let data = this.#formatSchedulesData(this.#extractData(form));
+    this.#sendScheduleData(form, data);
+  }
+
   // ---------- helpers ----------
   // --- Schedules ---
   #listSchedules() {
@@ -112,6 +123,23 @@ export default class AppController {
     return JSON.stringify(data);
   }
 
+  #formatSchedulesData(data) {
+    let schedulesObj = {};
+    
+    Object.keys(data).forEach(key => {
+      let [field, num] = key.split('_');
+      if (field === 'staff') {
+        schedulesObj[key] = {};
+        schedulesObj[key]['staff_id'] = data[key];
+      } else {
+        schedulesObj[`staff_${num}`][field] = data[key];
+      }
+    });
+
+    let schedulesArr = Object.values(schedulesObj);
+    return JSON.stringify({"schedules": schedulesArr});
+  }
+
   async #sendStaffData(form, data) {
     try {
       let response = await this.app.DBAPI.createNewStaff(form, data);
@@ -122,6 +150,25 @@ export default class AppController {
         case 201:
           let responseJson = await response.json();
           this.app.userMsg(`Successfully created staff with id: ${responseJson.id}`);
+          break;
+        default:
+          throw new Error('Something went wrong.')
+      }
+    } catch(error) {
+      this.app.errorMsg(error.message);
+    }
+  }
+
+  async #sendScheduleData(form, data) {
+    try {
+      let response = await this.app.DBAPI.addSchedules(form, data);
+
+      switch (response.status) {
+        case 400:
+          throw new Error('Please check your inputs.');
+        case 201:
+          this.app.userMsg('Schedules added.');
+          form.reset();
           break;
         default:
           throw new Error('Something went wrong.')
