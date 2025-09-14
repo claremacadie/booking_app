@@ -10,6 +10,7 @@ import BookingForm from '../view/bookingForm.js';
 export default class App {
   constructor(url) {
     this.url = url;
+    this.schedules = null;
     this.#init();
   }
   
@@ -54,7 +55,6 @@ export default class App {
 
   // --- Schedules ---
   async loadSchedules() {
-    this.schedules = null;
     try {
       let response = await this.DBAPI.fetchSchedules();
       if (response.status !== 200) throw new Error("Something went wrong, please try again");
@@ -67,7 +67,11 @@ export default class App {
         this.schedules.push(new Schedule(obj));
       });
     } catch(error) {
-      this.clearUserMsg();
+      if (this.schedules) {
+        this.userMsg("Using cached schedule data.")
+      } else {
+        this.clearUserMsg();
+      }
       this.errorMsg(error.message);
     } finally {
       this.userMsg(`${this.$userMsg.textContent} The request has completed.`)

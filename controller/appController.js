@@ -64,7 +64,6 @@ export default class AppController {
   
   
   async #displayBookingForm() {
-    console.log('hi');
     this.app.clearUserMsg();
     this.app.clearErrorMsg();
     
@@ -207,7 +206,9 @@ Behaviour:
   When student doesn't exist, Student does not exist; booking sequence: 987845
   Bring up student details form, Successfully added student to the database. Booked.
 
-To do: 
+To do:
+  Why am I getting The request has completed twice?
+
   Used existing schedule data if request for new data times out
 
   Event listener & handler for submitBooking
@@ -226,7 +227,10 @@ To do:
       - Please check your inputs.
 
 
-Nice to have:
+Nice to have: 
+  Fix bug: Cannot convert undefined or null to object schedulesForm:118
+    - May be due to fetches overlapping, would be good to cancel requests
+
   Remove hard-coded error messages that should be coming back from the database
   
   If click on navigation button, cancel any pending requests, otherwise you get messages about a different page.
