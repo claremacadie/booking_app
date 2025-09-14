@@ -11,6 +11,10 @@ export default class SchedulesForm {
     this.$submitBtn = document.createElement('button');
 
     await this.app.fetchStaff();
+    if (!this.app.staff) {
+      this.app.userMsg("Staff did not load, please refresh the page.")
+      return;
+    }
     this.scheduleNum = 0;
 
     this.#createHTML();

@@ -4,18 +4,21 @@ export default class BookingForm {
     this.#init();
   }
 
-  #init() {
+  async #init() {
     this.$form = document.createElement('form');
     this.$submitButton = document.createElement('button');
 
-    this.#createHTML();
-    this.#configureHTML();
+    // await this.app.loadSchedules();
+    // console.log(this.app.schedules);
+    // this.#createHTML();
+    // this.#configureHTML();
   }
 
   // ---------- private API ----------
-  #createHTML() {
+  async #createHTML() {
     let dl = document.createElement('dl');
     this.#createDlListItem(dl, 'email', 'email');
+    this.#createScheduleInput(dl);
 
     this.$form.append(dl, this.$submitButton);
   }
@@ -48,16 +51,7 @@ export default class BookingForm {
 
     dl.append(dt, dd);
   }
-}
-/*
-To do:
-  BookingForm class
-    Please select one schedule, select box with schedules
 
-  StudentDetails class
-    Heading Please provide new student details
-    Email
-    Name
-    Booking sequence - already filled in
-    Submit button
-*/
+  async #createScheduleInput(dl) {
+  }
+}

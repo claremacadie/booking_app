@@ -11,6 +11,7 @@ export default class App {
   constructor(url) {
     this.url = url;
     this.schedules = null;
+    this.staff = null;
     this.#init();
   }
   
@@ -80,7 +81,6 @@ export default class App {
 
   // --- Staff ---
   async fetchStaff() {
-    this.staff = null;
     try {
       let response = await this.DBAPI.fetchStaff();
       if (response.status !== 200) throw new Error("Something went wrong, please try again");
@@ -92,7 +92,11 @@ export default class App {
         'email': obj.email,
       });
     } catch(error) {
-      this.clearUserMsg();
+      if (this.staff) {
+        this.userMsg("Using cached staff data.")
+      } else {
+        this.clearUserMsg();
+      }
       this.errorMsg(error.message);
     } finally {
       this.userMsg(`${this.$userMsg.textContent} The staff request has completed.`)
