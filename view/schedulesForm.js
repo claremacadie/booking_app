@@ -128,29 +128,12 @@ export default class SchedulesForm {
     option.textContent = staffName;
     return option;
   }
-
-  #getStaffNameById(id) {
-    return this.app.staff[id].name;
-  }
 }
 
 /*
-Behaviour:
-  - Screen initialises with a single "Schedule 1" form
-  - When more schedules are added, Schedule 2 form, etc.
-  - Only one submit button
-
-  - Submitting with empty fields, if any fields in any form are empty: 
-    - Please check your inputs, with an alert
-  - Success: 
-    - Schedules added, with an alert
-    - Existing forms reset, no forms deleted
-
 To do:
-    Every time the Add schedules button is clicked:
-      - reload staff and staffOptions
 
-    When adding schedule fieldsets, use same staffOptions (even if db updated with new staff). So maybe update this.staff when Add Schedules pressed.
 
-    If click on navigation button, cancel any pending requests, otherwise you get messages about a different page.
+Nice to have:
+  If click on navigation button, cancel any pending requests, otherwise you get messages about a different page.
 */

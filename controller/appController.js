@@ -58,6 +58,7 @@ export default class AppController {
     this.app.$schedulesDiv.classList.add('hidden');
     this.app.$staffFormDiv.classList.add('hidden');
     this.app.$schedulesFormDiv.classList.remove('hidden');
+    this.app.fetchStaff();
   }
 
   // ---------- Private handlers ----------
