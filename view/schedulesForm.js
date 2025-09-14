@@ -129,11 +129,3 @@ export default class SchedulesForm {
     return option;
   }
 }
-
-/*
-To do:
-
-
-Nice to have:
-  If click on navigation button, cancel any pending requests, otherwise you get messages about a different page.
-*/

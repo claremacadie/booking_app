@@ -5,6 +5,7 @@ import AppController from './appController.js';
 import Schedule from '../model/schedule.js';
 import StaffForm from '../view/staffForm.js';
 import SchedulesForm from '../view/schedulesForm.js';
+import BookingForm from '../view/bookingForm.js';
 
 export default class App {
   constructor(url) {
@@ -17,15 +18,20 @@ export default class App {
     this.$schedulesDiv = document.getElementById("schedules");
     this.$staffFormDiv = document.getElementById("staff-form");
     this.$schedulesFormDiv = document.getElementById("schedules-form");
+    this.$bookingFormDiv = document.getElementById("booking-form");
+
     this.$userMsg = document.getElementById("user-message");
     this.$errorMsg = document.getElementById("error-message");
+
     this.$schedulesBtn = document.getElementById("schedules-btn");
     this.$staffFormBtn = document.getElementById("staff-form-btn");
     this.$schedulesFormBtn = document.getElementById("schedules-form-btn");
+    this.$bookingFormBtn = document.getElementById("booking-btn");
 
     this.DBAPI = new DBAPI(this.url);
     this.staffForm = new StaffForm(this);
     this.schedulesForm = new SchedulesForm(this);
+    this.bookingForm = new BookingForm(this);
     this.appController = new AppController(this);
   }
   

@@ -10,7 +10,7 @@ export default class AppController {
   #init() {
     this.$staffForm = this.app.staffForm.$form;
     // Set default view
-    this.#displaySchedulesForm();
+    this.#displayBookingForm();
   } 
 
   #bind() {
@@ -18,12 +18,12 @@ export default class AppController {
     this.app.$schedulesBtn.addEventListener('click', this.#handleSchedulesBtn.bind(this));
     this.app.$staffFormBtn.addEventListener('click', this.#handleStaffFormBtn.bind(this));
     this.app.$schedulesFormBtn.addEventListener('click', this.#handleSchedulesFormBtn.bind(this));
+    this.app.$bookingFormBtn.addEventListener('click', this.#handleBookingFormBtn.bind(this));
     this.app.schedulesForm.$addSchedulesBtn.addEventListener('click', this.#handleAddSchedulesBtn.bind(this))
     this.app.schedulesForm.$form.addEventListener('submit', this.#handleScheduleFormSubmit.bind(this))
   }
 
   // ---------- Private API ----------
-  // --- Schedules ---
   async #displaySchedules() {
     this.app.$schedulesDiv.innerHTML = '';
     this.app.clearUserMsg();
@@ -33,14 +33,14 @@ export default class AppController {
     this.app.$schedulesDiv.classList.remove('hidden');
     this.app.$staffFormDiv.classList.add('hidden');
     this.app.$schedulesFormDiv.classList.add('hidden');
+    this.app.$bookingFormDiv.classList.add('hidden');
     
     this.app.userMsg('Loading schedules...');
     await this.app.loadSchedules();
     
     if (this.app.schedules) this.#listSchedules();
   }
-
-  // --- Staff Form ---
+  
   #displayStaffForm() {
     this.app.clearUserMsg();
     this.app.clearErrorMsg();
@@ -48,9 +48,9 @@ export default class AppController {
     this.app.$schedulesDiv.classList.add('hidden');
     this.app.$staffFormDiv.classList.remove('hidden');
     this.app.$schedulesFormDiv.classList.add('hidden');
+    this.app.$bookingFormDiv.classList.add('hidden');
   }
   
-  // --- Schedules Form ---
   #displaySchedulesForm() {
     this.app.clearUserMsg();
     this.app.clearErrorMsg();
@@ -58,7 +58,24 @@ export default class AppController {
     this.app.$schedulesDiv.classList.add('hidden');
     this.app.$staffFormDiv.classList.add('hidden');
     this.app.$schedulesFormDiv.classList.remove('hidden');
+    this.app.$bookingFormDiv.classList.add('hidden');
     this.app.fetchStaff();
+  }
+  
+  
+  async #displayBookingForm() {
+    console.log('hi');
+    this.app.clearUserMsg();
+    this.app.clearErrorMsg();
+    
+    this.app.$pageHeading.textContent = "Book a Schedule";
+    this.app.$schedulesDiv.classList.remove('hidden');
+    this.app.$staffFormDiv.classList.add('hidden');
+    this.app.$schedulesFormDiv.classList.add('hidden');
+    this.app.$bookingFormDiv.classList.remove('hidden');
+    
+    this.app.userMsg('Loading schedules...');
+    await this.app.loadSchedules();
   }
 
   // ---------- Private handlers ----------
@@ -75,6 +92,11 @@ export default class AppController {
   #handleSchedulesFormBtn(event) {
     event.preventDefault();
     this.#displaySchedulesForm();
+  }
+  
+  #handleBookingFormBtn(event) {
+    event.preventDefault();
+    this.#displayBookingForm();
   }
 
   async #handleStaffFormSubmit(event) {
@@ -179,3 +201,33 @@ export default class AppController {
     }
   }
 }
+
+/*
+Behaviour:
+  When student doesn't exist, Student does not exist; booking sequence: 987845
+  Bring up student details form, Successfully added student to the database. Booked.
+
+To do: 
+  Used existing schedule data if request for new data times out
+
+  Event listener & handler for submitBooking
+    extract, send (/bookings, (schedule) id and student_email), handle error messages
+    To get from response:
+      - Success Booked
+      - Failure:
+        - Student does not exist; booking sequence: 987845
+        - Schedule is either booked or does not exist
+
+  Event listener & handler for student signup
+    extract, send (/students, email, name, booking_sequence), handle error messages
+    To get from response:
+      - Success Successfully added student to the database. Booked.
+      - Must have a booking sequence.
+      - Please check your inputs.
+
+
+Nice to have:
+  Remove hard-coded error messages that should be coming back from the database
+  
+  If click on navigation button, cancel any pending requests, otherwise you get messages about a different page.
+*/
