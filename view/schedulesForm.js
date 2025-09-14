@@ -6,9 +6,13 @@ export default class SchedulesForm {
 
   async #init() {
     this.$form = document.createElement('form');
-    this.$submitButton = document.createElement('button');
+    this.$addSchedulesBtn = document.createElement('button');
+    this.$schedulesDiv = document.createElement('div');
+    this.$submitBtn = document.createElement('button');
 
     await this.app.fetchStaff();
+    this.#createStaffOptions();
+    this.scheduleNum = 0;
 
     this.#createHTML();
     this.#configureHTML();
@@ -16,14 +20,18 @@ export default class SchedulesForm {
 
   // ---------- private API ----------
   #createHTML() {
-    
-
-    this.$form.append();
+    this.#createScheduleFieldset();
+    this.$form.append(this.$addSchedulesBtn, this.$schedulesDiv, this.$submitBtn);
   }
 
   #configureHTML() {
-    this.$submitButton.textContent = 'Submit';
-    this.$submitButton.type = 'submit';
+    this.$addSchedulesBtn.textContent = 'Add more schedules';
+    this.$addSchedulesBtn.type = 'submit';
+    this.$addSchedulesBtn.id = 'btnSubmit';
+
+    this.$submitBtn.textContent = 'Submit';
+    this.$submitBtn.type = 'submit';
+    this.$submitBtn.id = 'btnSubmit';
 
     this.$form.action = this.app.url + '/schedules';
     this.$form.method = 'POST';
@@ -33,8 +41,75 @@ export default class SchedulesForm {
   }
 
   // ---------- helpers ----------
-  #createScheduleForm(id) {
-    
+  #createScheduleFieldset() {
+    this.scheduleNum += 1;
+    let id = this.scheduleNum;
+    console.log(id)
+
+    let fieldset = document.createElement('fieldset');
+    let legend = document.createElement('legend');
+    legend.textContent = `Schedule ${id}`;
+
+    let staffDiv = this.#createStaffDiv(id);
+    let dateDiv = this.#createDateDiv(id);
+    let timeDiv = this.#createTimeDiv(id);
+
+    fieldset.append(legend, staffDiv, dateDiv, timeDiv);
+    this.$schedulesDiv.append(fieldset);
+  }
+
+  #createStaffDiv(id) {
+    let staffDiv = document.createElement('div');
+
+    let staffLabel = document.createElement('label');
+    staffLabel.setAttribute('for', `staff_${id}`);
+    staffLabel.textContent = 'Staff Name:';
+
+    let staffSelect = document.createElement('select');
+    staffSelect.setAttribute('id', `staff_${id}`);
+    staffSelect.setAttribute('name', `staff_${id}`);
+    staffSelect.innerHTML = this.staffOptions;
+
+    staffDiv.append(staffLabel, staffSelect);
+    return staffDiv;
+  }
+
+  #createDateDiv(id) {
+    let dateDiv = document.createElement('div');
+
+    let dateLabel = document.createElement('label');
+    dateLabel.setAttribute('for', `date_${id}`);
+    dateLabel.textContent = 'Date:';
+
+    let dateInput = document.createElement('input');
+    dateInput.setAttribute('id', `date_${id}`);
+    dateInput.setAttribute('name', `date_${id}`);
+    dateInput.setAttribute('type', 'text');
+    dateInput.setAttribute('placeholder', 'mm-dd-yy');
+
+    dateDiv.append(dateLabel, dateInput);
+    return dateDiv;
+  }
+
+  #createTimeDiv(id) {
+    let timeDiv = document.createElement('div');
+
+    let timeLabel = document.createElement('label');
+    timeLabel.setAttribute('for', `time_${id}`);
+    timeLabel.textContent = 'Time:';
+
+    let timeInput = document.createElement('input');
+    timeInput.setAttribute('id', `time_${id}`);
+    timeInput.setAttribute('name', `time_${id}`);
+    timeInput.setAttribute('type', 'text');
+    timeInput.setAttribute('placeholder', 'hh:mm');
+
+    timeDiv.append(timeLabel, timeInput);
+    return timeDiv;
+  }
+
+  #createStaffOptions() {
+    this.staffOptions = '<option value="1">Fae Kassulke V</option><option value="2">Aaron Nitzsche</option><option value="3">Gia Rice</option><option value="4">Esperanza Doyle</option><option value="5">Lacey Kautzer I</option>';
   }
 
   #getStaffNameById(id) {
@@ -55,35 +130,7 @@ Behaviour:
     - Existing forms reset, no forms deleted
 
 To do:
-  instance attribute of schedule number, resets everytime form is renewed
-
-  Create main form: (SchedulesForm)
-    <button id="btnAdd">Add more schedules</button>
-    <form method="post" action="/api/schedules">
-      <div id="schedules"></div>
-      <button id="btnSubmit" type="submit">Submit</button>
-    </form>
-
-  Create schedule form: (SchedulesForm)
-    <fieldset id="schedule_1">
-      <legend>Schedule 1</legend>
-
-      <div>
-        <label for="staff_1">Staff Name:</label>
-        <select id="staff_1" name="staff_1"><option value="1">Fae Kassulke V</option><option value="2">Aaron Nitzsche</option><option value="3">Gia Rice</option><option value="4">Esperanza Doyle</option><option value="5">Lacey Kautzer I</option></select>
-      </div>
-
-      <div>
-        <label for="date_1">Date:</label>
-        <input type="text" id="date_1" name="date_1" placeholder="mm-dd-yy">
-      </div>
-
-      <div>
-        <label for="time_1">Time:</label>
-        <input type="text" id="time_1" name="time_1" placeholder="hh:mm">
-      </div>
-
-    </fieldset>
+  Create staff options
 
   Listener for addMoreSchedules: (appController)
     Add new fieldset to schedulesForm (SchedulesForm)
