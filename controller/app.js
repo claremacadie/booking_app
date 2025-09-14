@@ -74,7 +74,7 @@ export default class App {
       }
       this.errorMsg(error.message);
     } finally {
-      this.userMsg(`${this.$userMsg.textContent} The request has completed.`)
+      this.userMsg(`${this.$userMsg.textContent} The schedule request has completed.`)
     }
   }
 
@@ -95,7 +95,7 @@ export default class App {
       this.clearUserMsg();
       this.errorMsg(error.message);
     } finally {
-      this.userMsg(`${this.$userMsg.textContent} The request has completed.`)
+      this.userMsg(`${this.$userMsg.textContent} The staff request has completed.`)
     }
   }
     
