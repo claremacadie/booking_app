@@ -4,9 +4,11 @@ export default class SchedulesForm {
     this.#init();
   }
 
-  #init() {
+  async #init() {
     this.$form = document.createElement('form');
     this.$submitButton = document.createElement('button');
+
+    await this.app.fetchStaff();
 
     this.#createHTML();
     this.#configureHTML();
@@ -14,40 +16,29 @@ export default class SchedulesForm {
 
   // ---------- private API ----------
   #createHTML() {
-    let dl = document.createElement('dl');
-    this.#createDlListItem(dl, 'email', 'email');
-    this.#createDlListItem(dl, 'name', 'text');
+    
 
-    this.$form.append(dl, this.$submitButton);
+    this.$form.append();
   }
 
   #configureHTML() {
     this.$submitButton.textContent = 'Submit';
     this.$submitButton.type = 'submit';
 
-    this.$form.action = this.app.url + '/staff_members';
+    this.$form.action = this.app.url + '/schedules';
     this.$form.method = 'POST';
 
-    this.$form.classList.add ('form');
+    this.$form.classList.add('form');
     this.app.$schedulesFormDiv.append(this.$form);
   }
 
   // ---------- helpers ----------
-  #createDlListItem(dl, field, inputType) {
-    let dt = document.createElement('dt');
-    let label = document.createElement('label');
-    label.setAttribute('for', field);
-    label.textContent = field[0].toUpperCase() + field.slice(1);
-    dt.append(label);
+  #createScheduleForm(id) {
+    
+  }
 
-    let dd = document.createElement('dd');
-    let input = document.createElement('input');
-    input.setAttribute('type', inputType);
-    input.setAttribute('id', field);
-    input.setAttribute('name', field);
-    dd.append(input);
-
-    dl.append(dt, dd);
+  #getStaffNameById(id) {
+    return this.app.staff[1].name;
   }
 }
 
@@ -64,13 +55,13 @@ Behaviour:
     - Existing forms reset, no forms deleted
 
 To do:
-  Fetch list of staff with ids (app)
+  instance attribute of schedule number, resets everytime form is renewed
 
   Create main form: (SchedulesForm)
     <button id="btnAdd">Add more schedules</button>
     <form method="post" action="/api/schedules">
       <div id="schedules"></div>
-      <input id="btnSubmit" type="submit">
+      <button id="btnSubmit" type="submit">Submit</button>
     </form>
 
   Create schedule form: (SchedulesForm)
@@ -101,6 +92,16 @@ To do:
     Extract data
     Validate for empty fields "Please check your inputs, with an alert"
     Format data
-    Send data  "Schedules added"
+    Send data  "Schedules added" 
+      - POST, /schedules
+      - {
+          "schedules": [
+              {
+                  "staff_id": 1,
+                  "date": "10-10-10",
+                  "time": "12:12"
+              }
+          ]
+        }
     Reset individual schedules forms, do not delete any
 */

@@ -17,6 +17,10 @@ export default class DBAPI {
       body: data,
     });
   }
+
+  async fetchStaff() {
+    return this.#requestWithTimeout(3000, `${this.url}/staff_members`);
+  }
   
   // ---------- private API ----------
   async #requestWithTimeout(delay, path, requestInitObj = {}) {

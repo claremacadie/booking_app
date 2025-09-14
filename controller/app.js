@@ -67,6 +67,27 @@ export default class App {
       this.userMsg(`${this.$userMsg.textContent} The request has completed.`)
     }
   }
+
+  // --- Staff ---
+  async fetchStaff() {
+    this.staff = null;
+    try {
+      let response = await this.DBAPI.fetchStaff();
+      if (response.status !== 200) throw new Error("Something went wrong, please try again");
+      this.userMsg('Staff finished loading.');
+      let jsonData = await response.json();
+      this.staff = {};
+      jsonData.forEach(obj => this.staff[obj.id] = { 
+        'name': obj.name, 
+        'email': obj.email,
+      });
+    } catch(error) {
+      this.clearUserMsg();
+      this.errorMsg(error.message);
+    } finally {
+      this.userMsg(`${this.$userMsg.textContent} The request has completed.`)
+    }
+  }
     
   // ---------- private API ----------
   #periodicDataFetch() {
