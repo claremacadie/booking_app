@@ -18,6 +18,7 @@ export default class AppController {
     this.app.$schedulesBtn.addEventListener('click', this.#handleSchedulesBtn.bind(this));
     this.app.$staffFormBtn.addEventListener('click', this.#handleStaffFormBtn.bind(this));
     this.app.$schedulesFormBtn.addEventListener('click', this.#handleSchedulesFormBtn.bind(this));
+    this.app.schedulesForm.$addSchedulesBtn.addEventListener('click', this.#handleAddSchedulesBtn.bind(this))
   }
 
   // ---------- Private API ----------
@@ -82,6 +83,11 @@ export default class AppController {
 
     let data = this.#formatData(this.#extractData(form));
     this.#sendStaffData(form, data);
+  }
+
+  #handleAddSchedulesBtn(event) {
+    event.preventDefault();
+    this.app.schedulesForm.addScheduleFieldset();
   }
 
   // ---------- helpers ----------

@@ -11,11 +11,15 @@ export default class SchedulesForm {
     this.$submitBtn = document.createElement('button');
 
     await this.app.fetchStaff();
-    this.#createStaffOptions();
     this.scheduleNum = 0;
 
     this.#createHTML();
     this.#configureHTML();
+  }
+
+  // ---------- public API ----------
+  addScheduleFieldset() {
+    this.#createScheduleFieldset();
   }
 
   // ---------- private API ----------
@@ -44,7 +48,6 @@ export default class SchedulesForm {
   #createScheduleFieldset() {
     this.scheduleNum += 1;
     let id = this.scheduleNum;
-    console.log(id)
 
     let fieldset = document.createElement('fieldset');
     let legend = document.createElement('legend');
@@ -68,7 +71,9 @@ export default class SchedulesForm {
     let staffSelect = document.createElement('select');
     staffSelect.setAttribute('id', `staff_${id}`);
     staffSelect.setAttribute('name', `staff_${id}`);
-    this.staffOptions.forEach(option => staffSelect.append(option));
+
+    let options = this.#createStaffOptions();
+    options.forEach(option => staffSelect.append(option));
 
     staffDiv.append(staffLabel, staffSelect);
     return staffDiv;
@@ -109,11 +114,12 @@ export default class SchedulesForm {
   }
 
   #createStaffOptions() {
-    this.staffOptions = [];
+    let staffOptions = [];
     Object.keys(this.app.staff).forEach(id => {
       let option = this.#createOption(id, this.app.staff[id].name);
-      this.staffOptions.push(option);
+      staffOptions.push(option);
     });
+    return staffOptions;
   }
 
   #createOption(staffId, staffName) {
@@ -141,9 +147,6 @@ Behaviour:
     - Existing forms reset, no forms deleted
 
 To do:
-  Listener for addMoreSchedules: (appController)
-    Add new fieldset to schedulesForm (SchedulesForm)
-
   Listener for submit schedules: (appController)
     Extract data
     Validate for empty fields "Please check your inputs, with an alert"
@@ -165,5 +168,7 @@ To do:
     Every time the Add schedules button is clicked:
       - reload staff and staffOptions
 
-    When adding schedule fieldsets, use same staffOptions (even if db updated with new staff)
+    When adding schedule fieldsets, use same staffOptions (even if db updated with new staff). So maybe update this.staff when Add Schedules pressed.
+
+    If click on navigation button, cancel any pending requests, otherwise you get messages about a different page.
 */
