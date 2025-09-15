@@ -63,7 +63,7 @@ export default class StudentForm {
     let input = document.createElement('input');
     input.setAttribute('type', 'text');
     input.setAttribute('id', 'booking-sequence');
-    input.setAttribute('name', 'booking-sequence');
+    input.setAttribute('name', 'booking_sequence');
     input.setAttribute('value', this.bookingSequence);
     dd.append(input);
 

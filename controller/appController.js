@@ -188,6 +188,16 @@ export default class AppController {
     this.#sendScheduleData(form, data);
   }
 
+  #handleStudentFormSubmit(event) {
+    event.preventDefault();
+    let form = event.target;
+    this.clearUserMsg();
+    this.clearErrorMsg();
+
+    let data = this.#formatData(this.#extractData(form));
+    this.#sendStudentData(form, data);
+  }
+
   // ---------- helpers ----------
   // --- Schedules ---
   #listSchedules() {
@@ -293,8 +303,31 @@ export default class AppController {
 
   #displayStudentForm(bookingSequence) {
     this.studentForm = new StudentForm(this, bookingSequence);
+    this.studentForm.$form.addEventListener('submit', this.#handleStudentFormSubmit.bind(this));
     let heading = document.createElement('h3');
-    heading.textContent = 'Please provide new student details'
+    heading.textContent = 'Please provide new student details';
     this.$bookingFormDiv.append(heading, this.studentForm.$form);
+  }
+
+  async #sendStudentData(form, data) {
+    console.log(data);
+    try {
+      let response = await this.app.DBAPI.addStudent(form, data);
+      let msg = await response.text();
+      
+      switch (response.status) {
+        case 404:
+          throw new Error(msg);
+        case 201:
+          this.userMsg(msg + ' Booked!');
+          // form.reset();
+          break;
+        default:
+          throw new Error(msg);
+      }
+    } catch(error) {
+      console.log(error);
+      this.errorMsg(error.message);
+    }
   }
 }

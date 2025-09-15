@@ -37,6 +37,14 @@ export default class DBAPI {
       body: data,
     });
   }
+
+  async addStudent(form, data) {
+    return await fetch(form.action, {
+      method: form.method,
+      headers: { 'Content-Type': 'application/json' },
+      body: data,
+    });
+  }
   
   // ---------- private API ----------
   async #requestWithTimeout(delay, path, requestInitObj = {}) {
