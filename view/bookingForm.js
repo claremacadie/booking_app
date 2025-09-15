@@ -14,10 +14,10 @@ export default class BookingForm {
   }
 
   // ---------- private API ----------
-  async #createHTML() {
+  #createHTML() {
     let dl = document.createElement('dl');
     this.#createDlListItem(dl, 'email', 'email');
-    this.#createScheduleInput(dl);
+    this.#createScheduleSelect(dl);
 
     this.$form.append(dl, this.$submitButton);
   }
@@ -51,6 +51,41 @@ export default class BookingForm {
     dl.append(dt, dd);
   }
 
-  async #createScheduleInput(dl) {
+  #createScheduleSelect(dl) {
+    console.log(this.app.schedules);
+    let dt = document.createElement('dt');
+    let label = document.createElement('label');
+    label.setAttribute('for', 'schedule');
+    label.textContent = 'Please select one schedule:';
+    dt.append(label);
+
+    let dd = document.createElement('dd');
+    let select = document.createElement('select');
+    select.setAttribute('id', 'schedule');
+    select.setAttribute('name', 'schedule');
+    let options = this.#createScheduleOptions();
+    options.forEach(option => select.append(option));
+    dd.append(select);
+
+    dl.append(dt, dd);
+  }
+
+  #createScheduleOptions() {
+    let scheduleOptions = [];
+    this.app.schedules.forEach(schedule => {
+      if (!schedule.studentEmail) return;
+      let scheduleDescriptionArr = [schedule.date, schedule.time]
+      let option = this.#createOption(schedule.id, scheduleDescriptionArr.join(' | '));
+      scheduleOptions.push(option);
+    });
+    return scheduleOptions;
+  }
+
+  #createOption(scheduleId, scheduleDescription) {
+    let option = document.createElement('option');
+    option.value = scheduleId;
+    option.textContent = scheduleDescription;
+    return option;
+  
   }
 }
