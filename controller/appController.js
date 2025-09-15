@@ -90,11 +90,13 @@ export default class AppController {
     this.$schedulesFormDiv.classList.remove('hidden');
     this.$bookingFormDiv.classList.add('hidden');
 
-    this.schedulesForm = new SchedulesForm(this);
-    this.schedulesForm.$addSchedulesBtn.addEventListener('click', this.#handleAddSchedulesBtn.bind(this));
-    this.schedulesForm.$form.addEventListener('submit', this.#handleScheduleFormSubmit.bind(this));
-
-    this.app.fetchStaff();
+    if (!this.schedulesForm) {
+      this.schedulesForm = new SchedulesForm(this);
+      this.schedulesForm.$addSchedulesBtn.addEventListener('click', this.#handleAddSchedulesBtn.bind(this));
+      this.schedulesForm.$form.addEventListener('submit', this.#handleScheduleFormSubmit.bind(this));
+    } else {
+      this.app.fetchStaff();
+    }
   }
   
   async displayBookingForm() {
