@@ -125,36 +125,36 @@ export default class AppController {
   // ---------- Private handlers ----------
   #handleSchedulesBtn(event) {
     event.preventDefault();
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
     this.displaySchedules();
   }
   
   #handleStaffFormBtn(event) {
     event.preventDefault();
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
     this.displayStaffForm();
   }
   
   #handleSchedulesFormBtn(event) {
     event.preventDefault();
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
     this.displaySchedulesForm();
   }
   
   #handleBookingFormBtn(event) {
     event.preventDefault();
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
     this.displayBookingForm();
   }
 
   async #handleStaffFormSubmit(event) {
     event.preventDefault();
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
     let form = event.target;
 
     let data = this.#formatData(this.#extractData(form));
@@ -163,8 +163,8 @@ export default class AppController {
 
   #handleBookingFormSubmit(event) {
     event.preventDefault();
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
     let form = event.target;
 
     let data = this.#formatData(this.#extractData(form));
@@ -173,16 +173,16 @@ export default class AppController {
 
   #handleAddSchedulesBtn(event) {
     event.preventDefault();
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
     this.schedulesForm.addScheduleFieldset();
   }
 
   #handleScheduleFormSubmit(event) {
     event.preventDefault();
     let form = event.target;
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
 
     let data = this.#formatSchedulesData(this.#extractData(form));
     this.#sendScheduleData(form, data);
@@ -191,8 +191,8 @@ export default class AppController {
   #handleStudentFormSubmit(event) {
     event.preventDefault();
     let form = event.target;
-    this.clearUserMsg();
-    this.clearErrorMsg();
+    // this.clearUserMsg();
+    // this.clearErrorMsg();
 
     let data = this.#formatData(this.#extractData(form));
     this.#sendStudentData(form, data);
@@ -280,13 +280,13 @@ export default class AppController {
   async #sendBooking(form, data) {
     try {
       let response = await this.app.DBAPI.addBooking(form, data);
+      let msg = await response.text();
       
       switch (response.status) {
         case 404:
-          let msg = await response.text();
           throw new Error(msg);
-        case 201:
-          this.userMsg('Booked but want to get message from server.');
+        case 204:
+          this.userMsg('Booked!');
           form.reset();
           break;
         default:
