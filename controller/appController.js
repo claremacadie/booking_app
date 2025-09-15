@@ -304,9 +304,7 @@ export default class AppController {
   #displayStudentForm(bookingSequence) {
     this.studentForm = new StudentForm(this, bookingSequence);
     this.studentForm.$form.addEventListener('submit', this.#handleStudentFormSubmit.bind(this));
-    let heading = document.createElement('h3');
-    heading.textContent = 'Please provide new student details';
-    this.$bookingFormDiv.append(heading, this.studentForm.$form);
+    this.$bookingFormDiv.append(this.studentForm.$form);
   }
 
   async #sendStudentData(form, data) {
@@ -320,7 +318,9 @@ export default class AppController {
           throw new Error(msg);
         case 201:
           this.userMsg(msg + ' Booked!');
-          // form.reset();
+          this.bookingForm.$bookingForm.reset();
+          this.studentForm.$form.remove();
+          this.app.studentForm = null;
           break;
         default:
           throw new Error(msg);

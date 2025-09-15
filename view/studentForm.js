@@ -16,12 +16,14 @@ export default class StudentForm {
 
   // ---------- private API ----------
   #createHTML() {
+    let legend = document.createElement('legend');
+    legend.textContent = 'Please provide new student details';
     let dl = document.createElement('dl');
     this.#createDlListItem(dl, 'email', 'email');
     this.#createDlListItem(dl, 'name', 'text');
     this.#createBookingInput(dl);
 
-    this.$form.append(dl, this.$submitButton);
+    this.$form.append(legend, dl, this.$submitButton);
   }
 
   #configureHTML() {
