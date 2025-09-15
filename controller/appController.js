@@ -52,11 +52,11 @@ export default class AppController {
   }
 
   clearUserMsg() {
-    this.$userMsg.textContent = '';
+    this.$userMsg.innerHTML = '';
   }
   
   clearErrorMsg() {
-    this.$errorMsg.textContent = '';
+    this.$errorMsg.innerHTML = '';
   }
 
   async displaySchedules() {
