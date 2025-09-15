@@ -1,6 +1,7 @@
 export default class BookingForm {
-  constructor(app) {
-    this.app = app;
+  constructor(appController) {
+    this.appController = appController;
+    this.app = appController.app;
     this.#init();
   }
 
@@ -9,9 +10,8 @@ export default class BookingForm {
     this.$submitButton = document.createElement('button');
 
     await this.app.loadSchedules();
-    console.log(this.app.schedules);
     if (!this.app.schedules) {
-      this.app.userMsg(" Schedules did not load, please refresh the page.")
+      this.appController.userMsg(" Schedules did not load, please refresh the page.")
     }
     this.#createHTML();
     this.#configureHTML();
@@ -34,7 +34,7 @@ export default class BookingForm {
     this.$form.method = 'POST';
 
     this.$form.classList.add ('form');
-    this.app.$bookingFormDiv.append(this.$form);
+    this.appController.$bookingFormDiv.append(this.$form);
   }
 
   // ---------- helpers ----------

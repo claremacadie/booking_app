@@ -1,6 +1,7 @@
 export default class StaffForm {
-  constructor(app) {
-    this.app = app;
+  constructor(appController) {
+    this.appController = appController;
+    this.app = appController.app;
     this.#init();
   }
 
@@ -29,7 +30,7 @@ export default class StaffForm {
     this.$form.method = 'POST';
 
     this.$form.classList.add ('form');
-    this.app.$staffFormDiv.append(this.$form);
+    this.appController.$staffFormDiv.append(this.$form);
   }
 
   // ---------- helpers ----------

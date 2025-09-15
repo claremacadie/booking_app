@@ -1,6 +1,7 @@
 export default class SchedulesForm {
-  constructor(app) {
-    this.app = app;
+  constructor(appController) {
+    this.appController = appController;
+    this.app = appController.app;
     this.#init();
   }
 
@@ -12,7 +13,7 @@ export default class SchedulesForm {
 
     await this.app.fetchStaff();
     if (!this.app.staff) {
-      this.app.userMsg("Staff did not load, please refresh the page.")
+      this.appController.userMsg("Staff did not load, please refresh the page.")
       return;
     }
     this.scheduleNum = 0;
@@ -45,7 +46,7 @@ export default class SchedulesForm {
     this.$form.method = 'POST';
 
     this.$form.classList.add('form');
-    this.app.$schedulesFormDiv.append(this.$form);
+    this.appController.$schedulesFormDiv.append(this.$form);
   }
 
   // ---------- helpers ----------

@@ -1,6 +1,7 @@
 export default class ScheduleList {
-  constructor(app) {
-    this.app = app;
+  constructor(appController) {
+    this.appController = appController;
+    this.app = appController.app;
     this.#init();
   }
 
@@ -19,6 +20,6 @@ export default class ScheduleList {
 
   #configureHTML() {
     this.$ul.classList.add('schedule-list');
-    this.app.$schedulesDiv.append(this.$ul);
+    this.appController.$schedulesDiv.append(this.$ul);
   }   
 }
