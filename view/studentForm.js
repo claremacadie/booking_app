@@ -1,8 +1,9 @@
 export default class StudentForm {
-  constructor(appController, bookingSequence) {
+  constructor(appController, bookingSequence, studentEmail) {
     this.appController = appController;
     this.app = appController.app;
     this.bookingSequence = bookingSequence;
+    this.studentEmail = studentEmail;
     this.#init();
   }
 
@@ -49,6 +50,7 @@ export default class StudentForm {
     input.setAttribute('type', inputType);
     input.setAttribute('id', field);
     input.setAttribute('name', field);
+    if (field === 'email') input.setAttribute('value', this.studentEmail)
     dd.append(input);
 
     dl.append(dt, dd);

@@ -158,9 +158,9 @@ export default class AppController {
   #handleBookingFormSubmit(event) {
     event.preventDefault();
     let form = event.target;
-
-    let data = this.#formatData(this.#extractData(form));
-    this.#sendBooking(form, data);
+    let formData = this.#extractData(form);
+    let data = this.#stringifyData(formData);
+    this.#sendBooking(form, data, formData.student_email);
   }
 
   #handleAddSchedulesBtn(event) {
@@ -203,6 +203,10 @@ export default class AppController {
   }
 
   #formatData(data) {
+    return JSON.stringify(data);
+  }
+
+  #stringifyData(data) {
     return JSON.stringify(data);
   }
   
@@ -263,7 +267,7 @@ export default class AppController {
   }
 
   // --- Booking Form ---
-  async #sendBooking(form, data) {
+  async #sendBooking(form, data, studentEmail) {
     try {
       let response = await this.app.DBAPI.addBooking(form, data);
       let msg = await response.text();
@@ -283,13 +287,13 @@ export default class AppController {
       this.errorMsg(error.message);
       if (error.message.match('booking_sequence')) {
         let bookingSequence = error.message.split(':')[1].trim();
-        this.#displayStudentForm(bookingSequence);
+        this.#displayStudentForm(bookingSequence, studentEmail);
       }
     }
   }
 
-  #displayStudentForm(bookingSequence) {
-    this.studentForm = new StudentForm(this, bookingSequence);
+  #displayStudentForm(bookingSequence, studentEmail) {
+    this.studentForm = new StudentForm(this, bookingSequence, studentEmail);
     this.studentForm.$form.addEventListener('submit', this.#handleStudentFormSubmit.bind(this));
     this.$bookingFormDiv.append(this.studentForm.$form);
   }
