@@ -2,6 +2,7 @@ export default class SchedulesForm {
   constructor(appController) {
     this.appController = appController;
     this.app = appController.app;
+    this.scheduleNum = 0;
     this.#init();
   }
 
@@ -10,13 +11,6 @@ export default class SchedulesForm {
     this.$addSchedulesBtn = document.createElement('button');
     this.$schedulesDiv = document.createElement('div');
     this.$submitBtn = document.createElement('button');
-
-    // move this to appController
-    await this.app.fetchStaff();
-    if (!this.app.staff) {
-      return;
-    }
-    this.scheduleNum = 0;
 
     this.#createHTML();
     this.#configureHTML();
