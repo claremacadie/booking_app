@@ -72,4 +72,9 @@ export default class App {
       this.appController.userMsg("The staff request has completed.")
     }
   }
+
+  getStaffNameById(id) {
+    if (!this.staff) return;
+    return this.staff[id].name;
+  }
 }

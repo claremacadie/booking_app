@@ -52,7 +52,6 @@ export default class BookingForm {
   }
 
   #createScheduleSelect(dl) {
-    console.log(this.app.schedules);
     let dt = document.createElement('dt');
     let label = document.createElement('label');
     label.setAttribute('for', 'schedule');
@@ -74,7 +73,8 @@ export default class BookingForm {
     let scheduleOptions = [];
     this.app.schedules.forEach(schedule => {
       if (!schedule.studentEmail) return;
-      let scheduleDescriptionArr = [schedule.date, schedule.time]
+      let staffName = this.app.getStaffNameById(schedule.staffId);
+      let scheduleDescriptionArr = [staffName, schedule.date, schedule.time]
       let option = this.#createOption(schedule.id, scheduleDescriptionArr.join(' | '));
       scheduleOptions.push(option);
     });
@@ -86,6 +86,5 @@ export default class BookingForm {
     option.value = scheduleId;
     option.textContent = scheduleDescription;
     return option;
-  
   }
 }
