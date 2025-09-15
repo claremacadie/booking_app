@@ -110,12 +110,12 @@ export default class AppController {
     this.$staffFormDiv.classList.add('hidden');
     this.$schedulesFormDiv.classList.add('hidden');
     this.$bookingFormDiv.classList.remove('hidden');
+    
+    await this.app.loadSchedules();
 
-    if (!this.bookingForm) {
+    if (!this.bookingForm && this.app.schedules) {
       this.bookingForm = new BookingForm(this);
       // event listeners
-    } else {
-      await this.app.loadSchedules();
     }
   }
 

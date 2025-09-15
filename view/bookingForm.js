@@ -9,13 +9,8 @@ export default class BookingForm {
     this.$form = document.createElement('form');
     this.$submitButton = document.createElement('button');
     
-    await this.app.loadSchedules();
-    if (!this.app.schedules) {
-      return;
-    } else {
-      this.#createHTML();
-      this.#configureHTML();
-    }
+    this.#createHTML();
+    this.#configureHTML();
   }
 
   // ---------- private API ----------

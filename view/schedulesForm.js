@@ -11,6 +11,7 @@ export default class SchedulesForm {
     this.$schedulesDiv = document.createElement('div');
     this.$submitBtn = document.createElement('button');
 
+    // move this to appController
     await this.app.fetchStaff();
     if (!this.app.staff) {
       return;
