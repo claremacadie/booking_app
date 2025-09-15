@@ -116,7 +116,7 @@ export default class AppController {
 
     if (!this.bookingForm && this.app.schedules && this.app.staff) {
       this.bookingForm = new BookingForm(this);
-      // event listeners
+      this.bookingForm.$bookingForm.addEventListener('submit', this.#handleBookingFormSubmit.bind(this))
     }
   }
 
@@ -157,6 +157,17 @@ export default class AppController {
 
     let data = this.#formatData(this.#extractData(form));
     this.#sendStaffData(form, data);
+  }
+
+  #handleBookingFormSubmit(event) {
+    event.preventDefault();
+    this.clearUserMsg();
+    this.clearErrorMsg();
+    let form = event.target;
+
+    let data = this.#formatData(this.#extractData(form));
+    console.log(data);
+    // this.#sendScheduleBooking(form, data);
   }
 
   #handleAddSchedulesBtn(event) {

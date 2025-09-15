@@ -16,7 +16,7 @@ export default class BookingForm {
   // ---------- private API ----------
   #createHTML() {
     let dl = document.createElement('dl');
-    this.#createDlListItem(dl, 'email', 'email');
+    this.#createEmailInput(dl);
     this.#createScheduleSelect(dl);
 
     this.$bookingForm.append(dl, this.$submitButton);
@@ -34,18 +34,18 @@ export default class BookingForm {
   }
 
   // ---------- helpers ----------
-  #createDlListItem(dl, field, inputType) {
+  #createEmailInput(dl) {
     let dt = document.createElement('dt');
     let label = document.createElement('label');
-    label.setAttribute('for', field);
-    label.textContent = field[0].toUpperCase() + field.slice(1);
+    label.setAttribute('for', 'email');
+    label.textContent = 'Email:';
     dt.append(label);
 
     let dd = document.createElement('dd');
     let input = document.createElement('input');
-    input.setAttribute('type', inputType);
-    input.setAttribute('id', field);
-    input.setAttribute('name', field);
+    input.setAttribute('type', 'email');
+    input.setAttribute('id', 'email');
+    input.setAttribute('name', 'student_email');
     dd.append(input);
 
     dl.append(dt, dd);
@@ -61,7 +61,7 @@ export default class BookingForm {
     let dd = document.createElement('dd');
     let select = document.createElement('select');
     select.setAttribute('id', 'schedule');
-    select.setAttribute('name', 'schedule');
+    select.setAttribute('name', 'id');
     let options = this.#createScheduleOptions();
     options.forEach(option => select.append(option));
     dd.append(select);
