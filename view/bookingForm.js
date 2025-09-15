@@ -72,7 +72,7 @@ export default class BookingForm {
   #createScheduleOptions() {
     let scheduleOptions = [];
     this.app.schedules.forEach(schedule => {
-      if (!schedule.studentEmail) return;
+      if (schedule.studentEmail) return;
       let staffName = this.app.getStaffNameById(schedule.staffId);
       let scheduleDescriptionArr = [staffName, schedule.date, schedule.time]
       let option = this.#createOption(schedule.id, scheduleDescriptionArr.join(' | '));

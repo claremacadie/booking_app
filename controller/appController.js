@@ -166,8 +166,7 @@ export default class AppController {
     let form = event.target;
 
     let data = this.#formatData(this.#extractData(form));
-    console.log(data);
-    // this.#sendScheduleBooking(form, data);
+    this.#sendBooking(form, data);
   }
 
   #handleAddSchedulesBtn(event) {
@@ -254,6 +253,26 @@ export default class AppController {
           throw new Error('Please check your inputs.');
         case 201:
           this.userMsg('Schedules added.');
+          form.reset();
+          break;
+        default:
+          throw new Error('Something went wrong.')
+      }
+    } catch(error) {
+      this.errorMsg(error.message);
+    }
+  }
+
+  async #sendBooking(form, data) {
+    try {
+      let response = await this.app.DBAPI.addBooking(form, data);
+      console.log(response);
+      switch (response.status) {
+        case 404:
+          let msg = await response.text();
+          throw new Error(msg);
+        case 201:
+          this.userMsg('Booked but want to get message from server.');
           form.reset();
           break;
         default:
