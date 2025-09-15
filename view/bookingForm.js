@@ -6,7 +6,7 @@ export default class BookingForm {
   }
 
   async #init() {
-    this.$bookingForm = document.createElement('form');
+    this.$form = document.createElement('form');
     this.$submitButton = document.createElement('button');
     
     this.#createHTML();
@@ -19,18 +19,18 @@ export default class BookingForm {
     this.#createEmailInput(dl);
     this.#createScheduleSelect(dl);
 
-    this.$bookingForm.append(dl, this.$submitButton);
+    this.$form.append(dl, this.$submitButton);
   }
 
   #configureHTML() {
     this.$submitButton.textContent = 'Submit';
     this.$submitButton.type = 'submit';
 
-    this.$bookingForm.action = this.app.url + '/bookings';
-    this.$bookingForm.method = 'POST';
+    this.$form.action = this.app.url + '/bookings';
+    this.$form.method = 'POST';
 
-    this.$bookingForm.classList.add ('form');
-    this.appController.$bookingFormDiv.append(this.$bookingForm);
+    this.$form.classList.add ('form');
+    this.appController.$bookingFormDiv.append(this.$form);
   }
 
   // ---------- helpers ----------

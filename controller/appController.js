@@ -122,7 +122,7 @@ export default class AppController {
 
     if (!this.bookingForm && this.app.schedules && this.app.staff) {
       this.bookingForm = new BookingForm(this);
-      this.bookingForm.$bookingForm.addEventListener('submit', this.#handleBookingFormSubmit.bind(this))
+      this.bookingForm.$form.addEventListener('submit', this.#handleBookingFormSubmit.bind(this))
     }
   }
 
@@ -319,7 +319,7 @@ export default class AppController {
   }
 
   #resetBookingForm() {
-    this.bookingForm.$bookingForm.remove();
+    this.bookingForm.$form.remove();
     this.$bookingFormDiv.innerHTML = '';
     this.bookingForm = null;
     this.app.schedules = null;
