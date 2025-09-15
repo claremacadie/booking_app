@@ -77,8 +77,10 @@ export default class AppController {
     this.$schedulesFormDiv.classList.add('hidden');
     this.$bookingFormDiv.classList.add('hidden');
 
-    this.staffForm = new StaffForm(this);
-    this.staffForm.$form.addEventListener('submit', this.#handleStaffFormSubmit.bind(this));
+    if (!this.staffForm) {
+      this.staffForm = new StaffForm(this);
+      this.staffForm.$form.addEventListener('submit', this.#handleStaffFormSubmit.bind(this));
+    }
   }
   
   displaySchedulesForm() {

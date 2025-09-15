@@ -15,11 +15,11 @@ export default class App {
   async #init() {
     this.appController = new AppController(this);
     this.DBAPI = new DBAPI(this.url);
-    
+
     // Set default view
     // this.appController.displaySchedules();
-    // this.appController.displayStaffForm();
-    this.appController.displaySchedulesForm();
+    this.appController.displayStaffForm();
+    // this.appController.displaySchedulesForm();
     // this.displayBookingForm();
   }
   
