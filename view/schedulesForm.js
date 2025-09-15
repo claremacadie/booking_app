@@ -13,7 +13,6 @@ export default class SchedulesForm {
 
     await this.app.fetchStaff();
     if (!this.app.staff) {
-      this.appController.userMsg("Staff did not load, please refresh the page.")
       return;
     }
     this.scheduleNum = 0;

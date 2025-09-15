@@ -41,9 +41,9 @@ export default class App {
       if (this.schedules) {
         this.appController.userMsg("Using cached schedule data.")
       } else {
-        // this.clearUserMsg();
+        this.appController.userMsg(" Schedules did not load, please refresh the page.");
       }
-      this.appController.errorMsg(`Loading schedules: ${error.message}`);
+      this.appController.errorMsg(`Schedules error: ${error.message}`);
     } finally {
       this.appController.userMsg("The schedule request has completed.")
     }
@@ -65,9 +65,9 @@ export default class App {
       if (this.staff) {
         this.appController.userMsg("Using cached staff data.")
       } else {
-        // this.clearUserMsg();
+        this.appController.userMsg("Staff did not load, please refresh the page.");
       }
-      this.appController.errorMsg(`Loading staff: ${error.message}`);
+      this.appController.errorMsg(`Staff error: ${error.message}`);
     } finally {
       this.appController.userMsg("The staff request has completed.")
     }
