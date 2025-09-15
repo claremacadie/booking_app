@@ -57,8 +57,8 @@ export default class AppController {
 
   async displaySchedules() {
     this.$schedulesDiv.innerHTML = '';
-    // this.app.clearUserMsg();
-    // this.app.clearErrorMsg();
+    this.clearUserMsg();
+    this.clearErrorMsg();
     
     this.$pageHeading.textContent = "Schedule List";
     this.$schedulesDiv.classList.remove('hidden');
@@ -71,8 +71,8 @@ export default class AppController {
   }
   
   displayStaffForm() {
-    // this.app.clearUserMsg();
-    // this.app.clearErrorMsg();
+    this.clearUserMsg();
+    this.clearErrorMsg();
     this.$pageHeading.textContent = "Add Staff";
     this.$schedulesDiv.classList.add('hidden');
     this.$staffFormDiv.classList.remove('hidden');
@@ -86,8 +86,8 @@ export default class AppController {
   }
   
   displaySchedulesForm() {
-    // this.app.clearUserMsg();
-    // this.app.clearErrorMsg();
+    this.clearUserMsg();
+    this.clearErrorMsg();
     this.$pageHeading.textContent = "Add Schedules";
     this.$schedulesDiv.classList.add('hidden');
     this.$staffFormDiv.classList.add('hidden');
@@ -104,8 +104,8 @@ export default class AppController {
   }
   
   async displayBookingForm() {
-    // this.app.clearUserMsg();
-    // this.app.clearErrorMsg();
+    this.clearUserMsg();
+    this.clearErrorMsg();
     
     this.$pageHeading.textContent = "Book a Schedule";
     this.$schedulesDiv.classList.add('hidden');
@@ -125,36 +125,26 @@ export default class AppController {
   // ---------- Private handlers ----------
   #handleSchedulesBtn(event) {
     event.preventDefault();
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
     this.displaySchedules();
   }
   
   #handleStaffFormBtn(event) {
     event.preventDefault();
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
     this.displayStaffForm();
   }
   
   #handleSchedulesFormBtn(event) {
     event.preventDefault();
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
     this.displaySchedulesForm();
   }
   
   #handleBookingFormBtn(event) {
     event.preventDefault();
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
     this.displayBookingForm();
   }
 
   async #handleStaffFormSubmit(event) {
     event.preventDefault();
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
     let form = event.target;
 
     let data = this.#formatData(this.#extractData(form));
@@ -163,8 +153,6 @@ export default class AppController {
 
   #handleBookingFormSubmit(event) {
     event.preventDefault();
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
     let form = event.target;
 
     let data = this.#formatData(this.#extractData(form));
@@ -173,16 +161,12 @@ export default class AppController {
 
   #handleAddSchedulesBtn(event) {
     event.preventDefault();
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
     this.schedulesForm.addScheduleFieldset();
   }
 
   #handleScheduleFormSubmit(event) {
     event.preventDefault();
     let form = event.target;
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
 
     let data = this.#formatSchedulesData(this.#extractData(form));
     this.#sendScheduleData(form, data);
@@ -191,8 +175,6 @@ export default class AppController {
   #handleStudentFormSubmit(event) {
     event.preventDefault();
     let form = event.target;
-    // this.clearUserMsg();
-    // this.clearErrorMsg();
 
     let data = this.#formatData(this.#extractData(form));
     this.#sendStudentData(form, data);
@@ -286,13 +268,14 @@ export default class AppController {
         case 404:
           throw new Error(msg);
         case 204:
-          this.userMsg('Booked!');
-          form.reset();
+          alert('Booked!');
+          this.#resetBookingForm();
           break;
         default:
           throw new Error('Something went wrong.')
       }
     } catch(error) {
+      this.clearUserMsg();
       this.errorMsg(error.message);
       if (error.message.match('booking_sequence')) {
         let bookingSequence = error.message.split(':')[1].trim();
@@ -308,7 +291,6 @@ export default class AppController {
   }
 
   async #sendStudentData(form, data) {
-    console.log(data);
     try {
       let response = await this.app.DBAPI.addStudent(form, data);
       let msg = await response.text();
@@ -317,10 +299,11 @@ export default class AppController {
         case 404:
           throw new Error(msg);
         case 201:
-          this.userMsg(msg + ' Booked!');
-          this.bookingForm.$bookingForm.reset();
+          this.userMsg(msg);
+          alert('Booked!')
           this.studentForm.$form.remove();
           this.app.studentForm = null;
+          this.#resetBookingForm();
           break;
         default:
           throw new Error(msg);
@@ -329,5 +312,13 @@ export default class AppController {
       console.log(error);
       this.errorMsg(error.message);
     }
+  }
+
+  #resetBookingForm() {
+    this.bookingForm.$bookingForm.remove();
+    this.$bookingFormDiv.innerHTML = '';
+    this.bookingForm = null;
+    this.app.schedules = null;
+    this.displayBookingForm();
   }
 }
