@@ -40,11 +40,15 @@ export default class AppController {
 
   // ---------- Public API ----------
   userMsg(msg) {
-    this.$userMsg.textContent = this.$userMsg.textContent + ' ' + msg;
+    let newMsg = document.createElement('p');
+    newMsg.textContent = msg;
+    this.$userMsg.append(newMsg);
   }
 
   errorMsg(msg) {
-    this.$errorMsg.textContent = this.$errorMsg.textContent + ' ' + msg;
+    let newMsg = document.createElement('p');
+    newMsg.textContent = msg;
+    this.$errorMsg.append(newMsg);
   }
 
   clearUserMsg() {
