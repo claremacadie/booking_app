@@ -2,6 +2,7 @@ import ScheduleList from '../view/scheduleList.js';
 import SchedulesForm from '../view/schedulesForm.js';
 import StaffForm from '../view/staffForm.js';
 import BookingForm from '../view/bookingForm.js';
+import StudentForm from '../view/studentForm.js';
 
 export default class AppController {
   constructor(app) {
@@ -9,6 +10,7 @@ export default class AppController {
     this.staffForm = null;
     this.schedulesForm = null;
     this.bookingForm = null;
+    this.studentForm = null;
     this.#init();
     this.#bind();
   }
@@ -207,24 +209,7 @@ export default class AppController {
   #formatData(data) {
     return JSON.stringify(data);
   }
-
-  #formatSchedulesData(data) {
-    let schedulesObj = {};
-    
-    Object.keys(data).forEach(key => {
-      let [field, num] = key.split('_');
-      if (field === 'staff') {
-        schedulesObj[key] = {};
-        schedulesObj[key]['staff_id'] = data[key];
-      } else {
-        schedulesObj[`staff_${num}`][field] = data[key];
-      }
-    });
-
-    let schedulesArr = Object.values(schedulesObj);
-    return JSON.stringify({"schedules": schedulesArr});
-  }
-
+  
   async #sendStaffData(form, data) {
     try {
       let response = await this.app.DBAPI.createNewStaff(form, data);
@@ -243,6 +228,24 @@ export default class AppController {
       this.errorMsg(error.message);
     }
   }
+
+  // --- Schedules Form ---
+  #formatSchedulesData(data) {
+    let schedulesObj = {};
+    
+    Object.keys(data).forEach(key => {
+      let [field, num] = key.split('_');
+      if (field === 'staff') {
+        schedulesObj[key] = {};
+        schedulesObj[key]['staff_id'] = data[key];
+      } else {
+        schedulesObj[`staff_${num}`][field] = data[key];
+      }
+    });
+
+    let schedulesArr = Object.values(schedulesObj);
+    return JSON.stringify({"schedules": schedulesArr});
+  }  
 
   async #sendScheduleData(form, data) {
     try {
@@ -263,10 +266,11 @@ export default class AppController {
     }
   }
 
+  // --- Booking Form ---
   async #sendBooking(form, data) {
     try {
       let response = await this.app.DBAPI.addBooking(form, data);
-      console.log(response);
+      
       switch (response.status) {
         case 404:
           let msg = await response.text();
@@ -280,6 +284,17 @@ export default class AppController {
       }
     } catch(error) {
       this.errorMsg(error.message);
+      if (error.message.match('booking_sequence')) {
+        let bookingSequence = error.message.split(':')[1].trim();
+        this.#displayStudentForm(bookingSequence);
+      }
     }
+  }
+
+  #displayStudentForm(bookingSequence) {
+    this.studentForm = new StudentForm(this, bookingSequence);
+    let heading = document.createElement('h3');
+    heading.textContent = 'Please provide new student details'
+    this.$bookingFormDiv.append(heading, this.studentForm.$form);
   }
 }
