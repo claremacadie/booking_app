@@ -213,6 +213,13 @@ export default class AppController {
     this.#sendStudentData(form, data);
   }
 
+  #handleBookingDateClick(event) {
+    event.preventDefault();
+    let target = event.target
+    if (!target.classList.contains('booking-date')) return;
+    this.#displyBookingsForDate(target);
+  }
+
   // ---------- helpers ----------
   // --- Schedules ---
   #listSchedules() {
@@ -372,5 +379,10 @@ export default class AppController {
 
     this.$bookingsListDiv.innerHTML = '';
     this.$bookingsListDiv.append(this.bookingsList.$ul);
+    this.bookingsList.$ul.addEventListener('click', this.#handleBookingDateClick.bind(this));
+  }
+
+  #displyBookingsForDate(target) {
+    console.log('hi');
   }
 }
