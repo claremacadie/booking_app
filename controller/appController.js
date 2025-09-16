@@ -251,12 +251,14 @@ export default class AppController {
   async #sendScheduleData(form, data) {
     try {
       let response = await this.app.DBAPI.addSchedules(form, data);
-
+      let msg;
       switch (response.status) {
         case 400:
-          throw new Error('Please check your inputs.');
-        case 201:
-          this.userMsg('Schedules added.');
+          msg = await response.text();
+          throw new Error(msg);
+          case 201:
+          msg = await response.text();
+          this.userMsg(msg);
           form.reset();
           break;
         default:
