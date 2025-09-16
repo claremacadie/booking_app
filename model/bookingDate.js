@@ -7,11 +7,12 @@ export default class BookingDate {
 
   #init() {
     this.$li = document.createElement('li');
-    this.#createHTML();
+    this.#configureHTML();
   }
 
   // ---------- private API ----------
-  #createHTML() {
+  #configureHTML() {
     this.$li.textContent = this.date;
+    this.$li.classList.add('booking-date');
   }
 }

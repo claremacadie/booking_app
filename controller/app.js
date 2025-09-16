@@ -90,7 +90,6 @@ export default class App {
       jsonData.forEach(date => {
         this.bookingsDates.push(new BookingDate(date));
       });
-      console.log(this.bookingsDates);
     } catch(error) {
       if (this.bookingsDates) {
         this.appController.userMsg("Using cached bookings dates data.")

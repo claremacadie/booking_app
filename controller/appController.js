@@ -3,6 +3,7 @@ import SchedulesForm from '../view/schedulesForm.js';
 import StaffForm from '../view/staffForm.js';
 import BookingForm from '../view/bookingForm.js';
 import StudentForm from '../view/studentForm.js';
+import BookingsList from '../view/bookingsList.js';
 
 export default class AppController {
   constructor(app) {
@@ -11,6 +12,7 @@ export default class AppController {
     this.schedulesForm = null;
     this.bookingForm = null;
     this.studentForm = null;
+    this.bookingsList = null;
     this.#init();
     this.#bind();
   }
@@ -145,7 +147,7 @@ export default class AppController {
     this.$bookingsListDiv.classList.remove('hidden');
 
     await this.app.loadBookingsDates();
-    // if (this.app.bookingsDates) this.#listBookings();
+    if (this.app.bookingsDates) this.#listBookingsDates();
   }
 
   // ---------- Private handlers ----------
@@ -358,5 +360,17 @@ export default class AppController {
     this.bookingForm = null;
     this.app.schedules = null;
     this.displayBookingForm();
+  }
+
+  // --- Bookings ---
+  #listBookingsDates() {
+    if (this.app.bookingsDates.length === 0) {
+      this.userMsg("There are currently no bookings.")
+    } else {
+      this.bookingsList = new BookingsList(this);
+    }
+
+    this.$bookingsListDiv.innerHTML = '';
+    this.$bookingsListDiv.append(this.bookingsList.$ul);
   }
 }
