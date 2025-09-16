@@ -3,6 +3,7 @@ import AppController from './appController.js';
 
 // Import view classes
 import Schedule from '../model/schedule.js';
+import BookingDate from '../model/bookingDate.js';
 
 export default class App {
   constructor(url) {
@@ -83,12 +84,13 @@ export default class App {
       this.appController.clearUserMsg();
       this.appController.userMsg('Bookings dates finished loading.');
       let jsonData = await response.json();
-      console.log(jsonData);
+      
       this.bookingsDates = [];
 
-      // jsonData.forEach(date => {
-      //   this.bookingsDates.push(new BookingDate(date));
-      // });
+      jsonData.forEach(date => {
+        this.bookingsDates.push(new BookingDate(date));
+      });
+      console.log(this.bookingsDates);
     } catch(error) {
       if (this.bookingsDates) {
         this.appController.userMsg("Using cached bookings dates data.")
