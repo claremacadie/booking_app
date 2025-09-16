@@ -9,6 +9,7 @@ export default class App {
     this.url = url;
     this.schedules = null;
     this.staff = null;
+    this.bookingsDates = null;
     this.#init();
   }
   
@@ -71,6 +72,30 @@ export default class App {
       } else {
         this.appController.userMsg("Staff did not load, please refresh the page.");
       }
+    }
+  }
+
+  async loadBookingsDates() {
+    this.appController.userMsg('Loading bookings dates...');
+    try {
+      let response = await this.DBAPI.fetchBookingsDates();
+      if (response.status !== 200) throw new Error("Something went wrong, please try again");
+      this.appController.clearUserMsg();
+      this.appController.userMsg('Bookings dates finished loading.');
+      let jsonData = await response.json();
+      console.log(jsonData);
+      this.bookingsDates = [];
+
+      // jsonData.forEach(date => {
+      //   this.bookingsDates.push(new BookingDate(date));
+      // });
+    } catch(error) {
+      if (this.bookingsDates) {
+        this.appController.userMsg("Using cached bookings dates data.")
+      } else {
+        this.appController.userMsg(" Bookings dates did not load, please refresh the page.");
+      }
+      this.appController.errorMsg(`Bookings Dates error: ${error.message}`);
     }
   }
 

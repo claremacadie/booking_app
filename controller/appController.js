@@ -144,7 +144,8 @@ export default class AppController {
     this.$bookingFormDiv.classList.add('hidden');
     this.$bookingsListDiv.classList.remove('hidden');
 
-    console.log('hi')
+    await this.app.loadBookingsDates();
+    // if (this.app.bookingsDates) this.#listBookings();
   }
 
   // ---------- Private handlers ----------

@@ -10,6 +10,10 @@ export default class DBAPI {
     return this.#requestWithTimeout(3000, `${this.url}/schedules`);
   }
 
+  async fetchBookingsDates() {
+    return this.#requestWithTimeout(3000, `${this.url}/bookings`);
+  }
+
   async createNewStaff(form, data) {
     return await fetch(form.action, {
       method: form.method,
