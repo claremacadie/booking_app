@@ -12,7 +12,9 @@ export default class BookingDate {
 
   // ---------- private API ----------
   #configureHTML() {
-    this.$li.textContent = this.date;
-    this.$li.classList.add('booking-date');
+    let anchor = document.createElement('a');
+    anchor.textContent = this.date;
+    anchor.classList.add('booking-date');
+    this.$li.append(anchor);
   }
 }

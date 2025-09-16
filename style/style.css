@@ -44,6 +44,18 @@ h3 {
   content: " | ";
 }
 
+/* Bookings Dates list */
+
+li.booking-date {
+  list-style-type: disc;
+}
+
+a.booking-date {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* Forms */
 .form > dl {
   border: 3px double #ccc;
