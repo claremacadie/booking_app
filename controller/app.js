@@ -25,7 +25,7 @@ export default class App {
   
   // ---------- public API ----------  
   async loadSchedules() {
-    this.appController.userMsg('Loading schedules.');
+    this.appController.userMsg('Loading schedules...');
     try {
       let response = await this.DBAPI.fetchSchedules();
       if (response.status !== 200) throw new Error("Something went wrong, please try again");
@@ -38,19 +38,19 @@ export default class App {
         this.schedules.push(new Schedule(obj));
       });
     } catch(error) {
+      this.appController.errorMsg(`Schedules error: ${error.message}`);
+    } finally {
+      this.appController.clearUserMsg();
       if (this.schedules) {
         this.appController.userMsg("Using cached schedule data.")
       } else {
         this.appController.userMsg(" Schedules did not load, please refresh the page.");
       }
-      this.appController.errorMsg(`Schedules error: ${error.message}`);
-    } finally {
-      this.appController.userMsg("The schedule request has completed.")
     }
   }
 
   async fetchStaff() {
-    this.appController.userMsg('Loading staff.');
+    this.appController.userMsg('Loading staff...');
     try {
       let response = await this.DBAPI.fetchStaff();
       if (response.status !== 200) throw new Error("Something went wrong, please try again");
@@ -62,14 +62,14 @@ export default class App {
         'email': obj.email,
       });
     } catch(error) {
+      this.appController.errorMsg(`Staff error: ${error.message}`);
+    } finally {
+      this.appController.clearUserMsg();
       if (this.staff) {
         this.appController.userMsg("Using cached staff data.")
       } else {
         this.appController.userMsg("Staff did not load, please refresh the page.");
       }
-      this.appController.errorMsg(`Staff error: ${error.message}`);
-    } finally {
-      this.appController.userMsg("The staff request has completed.")
     }
   }
 
