@@ -216,7 +216,8 @@ export default class AppController {
 
       switch (response.status) {
         case 400:
-          throw new Error('Staff cannot be created. Check your inputs.');
+          let msg = await response.text();
+          throw new Error(msg);
         case 201:
           let responseJson = await response.json();
           this.userMsg(`Successfully created staff with id: ${responseJson.id}`);

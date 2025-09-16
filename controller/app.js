@@ -19,8 +19,8 @@ export default class App {
     // Set default view
     // this.appController.displaySchedules();
     // this.appController.displayStaffForm();
-    this.appController.displaySchedulesForm();
-    // this.appController.displayBookingForm();
+    // this.appController.displaySchedulesForm();
+    this.appController.displayBookingForm();
   }
   
   // ---------- public API ----------  
