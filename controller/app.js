@@ -20,7 +20,8 @@ export default class App {
     // this.appController.displaySchedules();
     // this.appController.displayStaffForm();
     // this.appController.displaySchedulesForm();
-    this.appController.displayBookingForm();
+    // this.appController.displayBookingForm();
+    this.appController.displayBookingsList();
   }
   
   // ---------- public API ----------  

@@ -21,6 +21,7 @@ export default class AppController {
     this.$staffFormDiv = document.getElementById("staff-form");
     this.$schedulesFormDiv = document.getElementById("schedules-form");
     this.$bookingFormDiv = document.getElementById("booking-form");
+    this.$bookingsListDiv = document.getElementById("bookings-list");
 
     this.$userMsg = document.getElementById("user-message");
     this.$errorMsg = document.getElementById("error-message");
@@ -29,6 +30,7 @@ export default class AppController {
     this.$staffFormBtn = document.getElementById("staff-form-btn");
     this.$schedulesFormBtn = document.getElementById("schedules-form-btn");
     this.$bookingFormBtn = document.getElementById("booking-btn");
+    this.$bookingsListBtn = document.getElementById("bookings-list-btn");
   } 
 
   #bind() {
@@ -36,6 +38,7 @@ export default class AppController {
     this.$staffFormBtn.addEventListener('click', this.#handleStaffFormBtn.bind(this));
     this.$schedulesFormBtn.addEventListener('click', this.#handleSchedulesFormBtn.bind(this));
     this.$bookingFormBtn.addEventListener('click', this.#handleBookingFormBtn.bind(this));
+    this.$bookingsListBtn.addEventListener('click', this.#handleBookingsListBtn.bind(this));
   }
 
   // ---------- Public API ----------
@@ -69,6 +72,7 @@ export default class AppController {
     this.$staffFormDiv.classList.add('hidden');
     this.$schedulesFormDiv.classList.add('hidden');
     this.$bookingFormDiv.classList.add('hidden');
+    this.$bookingsListDiv.classList.add('hidden');
     
     await this.app.loadSchedules();
     if (this.app.schedules) this.#listSchedules();
@@ -82,6 +86,7 @@ export default class AppController {
     this.$staffFormDiv.classList.remove('hidden');
     this.$schedulesFormDiv.classList.add('hidden');
     this.$bookingFormDiv.classList.add('hidden');
+    this.$bookingsListDiv.classList.add('hidden');
 
     if (!this.staffForm) {
       this.staffForm = new StaffForm(this);
@@ -97,6 +102,7 @@ export default class AppController {
     this.$staffFormDiv.classList.add('hidden');
     this.$schedulesFormDiv.classList.remove('hidden');
     this.$bookingFormDiv.classList.add('hidden');
+    this.$bookingsListDiv.classList.add('hidden');
 
     await this.app.fetchStaff();
 
@@ -116,6 +122,7 @@ export default class AppController {
     this.$staffFormDiv.classList.add('hidden');
     this.$schedulesFormDiv.classList.add('hidden');
     this.$bookingFormDiv.classList.remove('hidden');
+    this.$bookingsListDiv.classList.add('hidden');
     
     await this.app.loadSchedules();
     await this.app.fetchStaff();
@@ -124,6 +131,20 @@ export default class AppController {
       this.bookingForm = new BookingForm(this);
       this.bookingForm.$form.addEventListener('submit', this.#handleBookingFormSubmit.bind(this))
     }
+  }
+
+  async displayBookingsList() {
+    this.clearUserMsg();
+    this.clearErrorMsg();
+
+    this.$pageHeading.textContent = "Bookings";
+    this.$schedulesDiv.classList.add('hidden');
+    this.$staffFormDiv.classList.add('hidden');
+    this.$schedulesFormDiv.classList.add('hidden');
+    this.$bookingFormDiv.classList.add('hidden');
+    this.$bookingsListDiv.classList.remove('hidden');
+
+    console.log('hi')
   }
 
   // ---------- Private handlers ----------
@@ -145,6 +166,11 @@ export default class AppController {
   #handleBookingFormBtn(event) {
     event.preventDefault();
     this.displayBookingForm();
+  }
+
+  #handleBookingsListBtn(event) {
+    event.preventDefault();
+    this.displayBookingsList();
   }
 
   async #handleStaffFormSubmit(event) {
