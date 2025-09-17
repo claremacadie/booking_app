@@ -1,6 +1,7 @@
 export default class BookingDate {
   constructor(date) {
     this.date = date;
+    this.bookings = [];
 
     this.#init();
   }
@@ -8,6 +9,11 @@ export default class BookingDate {
   #init() {
     this.$li = document.createElement('li');
     this.#configureHTML();
+  }
+
+  // ---------- private API ----------
+  addBookings(bookings) {
+    this.bookings = bookings;
   }
 
   // ---------- private API ----------

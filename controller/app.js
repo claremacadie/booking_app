@@ -108,11 +108,7 @@ export default class App {
       this.appController.clearUserMsg();
       this.appController.userMsg(`Bookings for ${date} finished loading.`);
       let jsonData = await response.json();
-      console.log(jsonData);
-
-      // jsonData.forEach(booking => {
-      //   this.bookingsDates.push(new BookingDate(date));
-      // });
+      this.#getBookingByDate(date).addBookings(jsonData);
     } catch(error) {
       if (this.bookingsDates[date]) {
         this.appController.userMsg(`Using cached data for bookings for ${date}.`)
@@ -126,5 +122,10 @@ export default class App {
   getStaffNameById(id) {
     if (!this.staff) return;
     return this.staff[id].name;
+  }
+
+  #getBookingByDate(date) {
+    if (!this.bookingsDates) return;
+    return this.bookingsDates.find(booking => booking.date === date);
   }
 }
