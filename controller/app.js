@@ -100,6 +100,29 @@ export default class App {
     }
   }
 
+  async loadBookingsForDate(date) {
+    this.appController.userMsg(`Loading bookings for: ${date}`);
+    try {
+      let response = await this.DBAPI.fetchBookingsForDate(date);
+      if (response.status !== 200) throw new Error("Something went wrong, please try again");
+      this.appController.clearUserMsg();
+      this.appController.userMsg(`Bookings for ${date} finished loading.`);
+      let jsonData = await response.json();
+      console.log(jsonData);
+
+      // jsonData.forEach(booking => {
+      //   this.bookingsDates.push(new BookingDate(date));
+      // });
+    } catch(error) {
+      if (this.bookingsDates[date]) {
+        this.appController.userMsg(`Using cached data for bookings for ${date}.`)
+      } else {
+        this.appController.userMsg(`Bookings for ${date} did not load, please refresh the page.`);
+      }
+      this.appController.errorMsg(`Bookings for ${date} error: ${error.message}`);
+    }
+  }
+
   getStaffNameById(id) {
     if (!this.staff) return;
     return this.staff[id].name;

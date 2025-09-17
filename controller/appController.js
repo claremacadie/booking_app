@@ -383,6 +383,7 @@ export default class AppController {
   }
 
   #displyBookingsForDate(target) {
-    console.log('hi');
+    let date = target.textContent;
+    this.app.loadBookingsForDate(date);
   }
 }

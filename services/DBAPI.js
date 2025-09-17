@@ -14,6 +14,10 @@ export default class DBAPI {
     return this.#requestWithTimeout(3000, `${this.url}/bookings`);
   }
 
+  async fetchBookingsForDate(date) {
+    return this.#requestWithTimeout(3000, `${this.url}/bookings/${date}`);
+  }
+
   async createNewStaff(form, data) {
     return await fetch(form.action, {
       method: form.method,
