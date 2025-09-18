@@ -56,7 +56,7 @@ a.booking-date {
 }
 
 li.booking {
-  list-style-type: disc;
+  list-style-type: circle;
   margin-left: 1em;
 }
 
