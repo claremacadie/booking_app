@@ -24,6 +24,7 @@ export default class AppController {
     this.$schedulesFormDiv = document.getElementById("schedules-form");
     this.$bookingFormDiv = document.getElementById("booking-form");
     this.$bookingsListDiv = document.getElementById("bookings-list");
+    this.divs = [this.$schedulesDiv, this.$staffFormDiv, this.$schedulesFormDiv, this.$bookingFormDiv, this.$bookingsListDiv];
 
     this.$userMsg = document.getElementById("user-message");
     this.$errorMsg = document.getElementById("error-message");
@@ -70,11 +71,7 @@ export default class AppController {
     this.clearErrorMsg();
     
     this.$pageHeading.textContent = "Schedule List";
-    this.$schedulesDiv.classList.remove('hidden');
-    this.$staffFormDiv.classList.add('hidden');
-    this.$schedulesFormDiv.classList.add('hidden');
-    this.$bookingFormDiv.classList.add('hidden');
-    this.$bookingsListDiv.classList.add('hidden');
+    this.#divToDisplay(this.$schedulesDiv);
     
     await this.app.loadSchedules();
     if (this.app.schedules) this.#listSchedules();
@@ -84,11 +81,7 @@ export default class AppController {
     this.clearUserMsg();
     this.clearErrorMsg();
     this.$pageHeading.textContent = "Add Staff";
-    this.$schedulesDiv.classList.add('hidden');
-    this.$staffFormDiv.classList.remove('hidden');
-    this.$schedulesFormDiv.classList.add('hidden');
-    this.$bookingFormDiv.classList.add('hidden');
-    this.$bookingsListDiv.classList.add('hidden');
+    this.#divToDisplay(this.$staffFormDiv);
 
     if (!this.staffForm) {
       this.staffForm = new StaffForm(this);
@@ -100,11 +93,7 @@ export default class AppController {
     this.clearUserMsg();
     this.clearErrorMsg();
     this.$pageHeading.textContent = "Add Schedules";
-    this.$schedulesDiv.classList.add('hidden');
-    this.$staffFormDiv.classList.add('hidden');
-    this.$schedulesFormDiv.classList.remove('hidden');
-    this.$bookingFormDiv.classList.add('hidden');
-    this.$bookingsListDiv.classList.add('hidden');
+    this.#divToDisplay(this.$schedulesFormDiv);
 
     await this.app.fetchStaff();
 
@@ -120,11 +109,7 @@ export default class AppController {
     this.clearErrorMsg();
     
     this.$pageHeading.textContent = "Book a Schedule";
-    this.$schedulesDiv.classList.add('hidden');
-    this.$staffFormDiv.classList.add('hidden');
-    this.$schedulesFormDiv.classList.add('hidden');
-    this.$bookingFormDiv.classList.remove('hidden');
-    this.$bookingsListDiv.classList.add('hidden');
+    this.#divToDisplay(this.$bookingFormDiv);
     
     await this.app.loadSchedules();
     await this.app.fetchStaff();
@@ -140,11 +125,7 @@ export default class AppController {
     this.clearErrorMsg();
 
     this.$pageHeading.textContent = "Bookings";
-    this.$schedulesDiv.classList.add('hidden');
-    this.$staffFormDiv.classList.add('hidden');
-    this.$schedulesFormDiv.classList.add('hidden');
-    this.$bookingFormDiv.classList.add('hidden');
-    this.$bookingsListDiv.classList.remove('hidden');
+    this.#divToDisplay(this.$bookingsListDiv);
 
     await this.app.loadBookingsDates();
     if (this.app.bookingsDates) this.#listBookingsDates();
@@ -221,6 +202,16 @@ export default class AppController {
   }
 
   // ---------- helpers ----------
+  #divToDisplay(displayDiv) {
+    this.divs.forEach(div => {
+      if (div === displayDiv) {
+        div.classList.remove('hidden');
+      } else {
+        div.classList.add('hidden');
+      }
+    })
+  }
+
   // --- Schedules ---
   #listSchedules() {
     if (this.app.schedules.length === 0) {
