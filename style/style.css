@@ -45,7 +45,6 @@ h3 {
 }
 
 /* Bookings Dates list */
-
 li.booking-date {
   list-style-type: disc;
 }
@@ -54,6 +53,11 @@ a.booking-date {
   color: blue;
   text-decoration: underline;
   cursor: pointer;
+}
+
+li.booking {
+  list-style-type: disc;
+  margin-left: 1em;
 }
 
 /* Forms */

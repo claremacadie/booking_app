@@ -108,7 +108,7 @@ export default class App {
       this.appController.clearUserMsg();
       this.appController.userMsg(`Bookings for ${date} finished loading.`);
       let jsonData = await response.json();
-      this.#getBookingByDate(date).addBookings(jsonData);
+      this.getBookingByDate(date).addBookings(jsonData);
     } catch(error) {
       if (this.bookingsDates[date]) {
         this.appController.userMsg(`Using cached data for bookings for ${date}.`)
@@ -124,7 +124,7 @@ export default class App {
     return this.staff[id].name;
   }
 
-  #getBookingByDate(date) {
+  getBookingByDate(date) {
     if (!this.bookingsDates) return;
     return this.bookingsDates.find(booking => booking.date === date);
   }

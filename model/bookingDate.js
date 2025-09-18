@@ -8,12 +8,23 @@ export default class BookingDate {
 
   #init() {
     this.$li = document.createElement('li');
+    this.$ul = document.createElement('ul');
     this.#configureHTML();
   }
 
-  // ---------- private API ----------
+  // ---------- public API ----------
   addBookings(bookings) {
     this.bookings = bookings;
+  }
+
+  createBookingsHTML() {
+    this.$ul.innerHTML = '';
+    this.bookings.forEach(booking => {
+      let li = document.createElement('li');
+      li.textContent = booking.join(' | ');
+      li.classList.add('booking');
+      this.$ul.append(li);
+    })
   }
 
   // ---------- private API ----------
@@ -21,6 +32,7 @@ export default class BookingDate {
     let anchor = document.createElement('a');
     anchor.textContent = this.date;
     anchor.classList.add('booking-date');
-    this.$li.append(anchor);
+    this.$li.classList.add('booking-date');
+    this.$li.append(anchor, this.$ul);
   }
 }

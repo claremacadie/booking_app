@@ -382,8 +382,9 @@ export default class AppController {
     this.bookingsList.$ul.addEventListener('click', this.#handleBookingDateClick.bind(this));
   }
 
-  #displyBookingsForDate(target) {
+  async #displyBookingsForDate(target) {
     let date = target.textContent;
-    this.app.loadBookingsForDate(date);
+    await this.app.loadBookingsForDate(date);
+    this.app.getBookingByDate(date).createBookingsHTML();
   }
 }
