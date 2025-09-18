@@ -42,7 +42,6 @@ export default class App {
       });
     } catch(error) {
       this.appController.errorMsg(`Schedules error: ${error.message}`);
-    } finally {
       this.appController.clearUserMsg();
       if (this.schedules) {
         this.appController.userMsg("Using cached schedule data.")
@@ -66,7 +65,6 @@ export default class App {
       });
     } catch(error) {
       this.appController.errorMsg(`Staff error: ${error.message}`);
-    } finally {
       this.appController.clearUserMsg();
       if (this.staff) {
         this.appController.userMsg("Using cached staff data.")
