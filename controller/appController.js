@@ -24,7 +24,13 @@ export default class AppController {
     this.$schedulesFormDiv = document.getElementById("schedules-form");
     this.$bookingFormDiv = document.getElementById("booking-form");
     this.$bookingsListDiv = document.getElementById("bookings-list");
-    this.divs = [this.$schedulesDiv, this.$staffFormDiv, this.$schedulesFormDiv, this.$bookingFormDiv, this.$bookingsListDiv];
+    this.$cancelBookingFormDiv = document.getElementById("cancel-booking-form");
+
+    this.divs = [
+      this.$schedulesDiv, this.$staffFormDiv, 
+      this.$schedulesFormDiv, this.$bookingFormDiv, 
+      this.$bookingsListDiv, this.$cancelBookingFormDiv
+    ];
 
     this.$userMsg = document.getElementById("user-message");
     this.$errorMsg = document.getElementById("error-message");
@@ -34,6 +40,7 @@ export default class AppController {
     this.$schedulesFormBtn = document.getElementById("schedules-form-btn");
     this.$bookingFormBtn = document.getElementById("booking-btn");
     this.$bookingsListBtn = document.getElementById("bookings-list-btn");
+    this.$cancelBookingFormBtn = document.getElementById("cancel-booking-form-btn");
   } 
 
   #bind() {
@@ -42,6 +49,7 @@ export default class AppController {
     this.$schedulesFormBtn.addEventListener('click', this.#handleSchedulesFormBtn.bind(this));
     this.$bookingFormBtn.addEventListener('click', this.#handleBookingFormBtn.bind(this));
     this.$bookingsListBtn.addEventListener('click', this.#handleBookingsListBtn.bind(this));
+    this.$cancelBookingFormBtn.addEventListener('click', this.#handleCancelBookingFormBtn.bind(this));
   }
 
   // ---------- Public API ----------
@@ -131,6 +139,16 @@ export default class AppController {
     if (this.app.bookingsDates) this.#listBookingsDates();
   }
 
+  displayCancelBookingForm() {
+    this.clearUserMsg();
+    this.clearErrorMsg();
+
+    this.$pageHeading.textContent = "Cancel Booking";
+    this.#divToDisplay(this.$cancelBookingFormDiv);
+
+    console.log('hi')
+  }
+
   // ---------- Private handlers ----------
   #handleSchedulesBtn(event) {
     event.preventDefault();
@@ -155,6 +173,11 @@ export default class AppController {
   #handleBookingsListBtn(event) {
     event.preventDefault();
     this.displayBookingsList();
+  }
+  
+  #handleCancelBookingFormBtn(event) {
+    event.preventDefault();
+    this.displayCancelBookingForm();    
   }
 
   async #handleStaffFormSubmit(event) {
@@ -378,4 +401,6 @@ export default class AppController {
     await this.app.loadBookingsForDate(date);
     this.app.getBookingByDate(date).createBookingsHTML();
   }
+
+  // --- Cancel Forms ---
 }
