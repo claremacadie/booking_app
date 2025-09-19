@@ -53,6 +53,12 @@ export default class DBAPI {
       body: data,
     });
   }
+
+  async cancelBooking(form, booking_id) {
+    return await fetch(form.action + `/${booking_id}`, {
+      method: form.getAttribute('method'),
+    });
+  }
   
   // ---------- private API ----------
   async #requestWithTimeout(delay, path, requestInitObj = {}) {

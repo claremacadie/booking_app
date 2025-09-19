@@ -4,6 +4,7 @@ import StaffForm from '../view/staffForm.js';
 import BookingForm from '../view/bookingForm.js';
 import StudentForm from '../view/studentForm.js';
 import BookingsList from '../view/bookingsList.js';
+import CancelBookingForm from '../view/cancelBookingForm.js';
 
 export default class AppController {
   constructor(app) {
@@ -13,6 +14,7 @@ export default class AppController {
     this.bookingForm = null;
     this.studentForm = null;
     this.bookingsList = null;
+    this.cancelBookingForm = null;
     this.#init();
     this.#bind();
   }
@@ -146,7 +148,11 @@ export default class AppController {
     this.$pageHeading.textContent = "Cancel Booking";
     this.#divToDisplay(this.$cancelBookingFormDiv);
 
-    console.log('hi')
+    if (!this.cancelBookingForm) {
+      this.cancelBookingForm= new CancelBookingForm(this);
+      this.$cancelBookingFormDiv.append(this.cancelBookingForm.$form);
+      this.cancelBookingForm.$form.addEventListener('submit', this.#handleCancelBookingFormSubmit.bind(this));
+    } 
   }
 
   // ---------- Private handlers ----------
@@ -222,6 +228,17 @@ export default class AppController {
     let target = event.target
     if (!target.classList.contains('booking-date')) return;
     this.#displyBookingsForDate(target);
+  }
+
+  #handleCancelBookingFormSubmit(event) {
+    event.preventDefault();
+    let form = event.target;
+
+    this.clearUserMsg();
+    this.clearErrorMsg();
+
+    let data = this.#extractData(form);
+    this.#cancelBooking(form, data.booking_id);
   }
 
   // ---------- helpers ----------
@@ -403,4 +420,24 @@ export default class AppController {
   }
 
   // --- Cancel Forms ---
+  async #cancelBooking(form, booking_id) {
+    console.log(booking_id)
+    try {
+      let response = await this.app.DBAPI.cancelBooking(form, booking_id);
+      let msg = await response.text();
+      
+      switch (response.status) {
+        case 204:
+          this.userMsg(msg);
+          alert('Booking Cancelled!')
+          this.cancelBookingForm.$form.reset();
+          break;
+        default:
+          throw new Error(msg);
+      }
+    } catch(error) {
+      console.log(error);
+      this.errorMsg(error.message);
+    }
+  }
 }
