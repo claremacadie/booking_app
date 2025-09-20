@@ -320,7 +320,7 @@ export default class AppController {
   // --- Staff Form ---
   async #sendStaffData(form, data) {
     try {
-      let response = await this.app.DBAPI.createNewStaff(form, data);
+      let response = await this.app.DBAPI.sendData(form, data);
 
       switch (response.status) {
         case 400:
@@ -359,7 +359,7 @@ export default class AppController {
 
   async #sendScheduleData(form, data) {
     try {
-      let response = await this.app.DBAPI.addSchedules(form, data);
+      let response = await this.app.DBAPI.sendData(form, data);
       let msg;
       switch (response.status) {
         case 400:
@@ -381,7 +381,7 @@ export default class AppController {
   // --- Booking Form ---
   async #sendBooking(form, data, studentEmail) {
     try {
-      let response = await this.app.DBAPI.addBooking(form, data);
+      let response = await this.app.DBAPI.sendData(form, data);
       let msg = await response.text();
       
       switch (response.status) {
@@ -412,7 +412,7 @@ export default class AppController {
 
   async #sendStudentData(form, data) {
     try {
-      let response = await this.app.DBAPI.addStudent(form, data);
+      let response = await this.app.DBAPI.sendData(form, data);
       let msg = await response.text();
       
       switch (response.status) {

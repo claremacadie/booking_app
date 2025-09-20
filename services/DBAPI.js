@@ -54,36 +54,12 @@ export default class DBAPI {
   fetchBookingsForDate(date) {
     return this.#requestWithTimeout(3000, `${this.url}/bookings/${date}`);
   }
-
-  async createNewStaff(form, data) {
-    return await fetch(form.action, {
-      method: form.method,
-      headers: { 'Content-Type': 'application/json' },
-      body: data,
-    });
-  }
-
+  
   fetchStaff() {
     return this.#requestWithTimeout(3000, `${this.url}/staff_members`);
   }
 
-  async addSchedules(form, data) {
-    return await fetch(form.action, {
-      method: form.method,
-      headers: { 'Content-Type': 'application/json' },
-      body: data,
-    });
-  }
-
-  async addBooking(form, data) {
-    return await fetch(form.action, {
-      method: form.method,
-      headers: { 'Content-Type': 'application/json' },
-      body: data,
-    });
-  }
-
-  async addStudent(form, data) {
+  async sendData(form, data) {
     return await fetch(form.action, {
       method: form.method,
       headers: { 'Content-Type': 'application/json' },
