@@ -3,18 +3,55 @@ import TimeoutError from '../utils/timeoutError.js';
 export default class DBAPI {
   constructor(url) {
     this.url = url;
+    this.timeout = null;
+    this.reject = null;
+  }
+
+  // ---------- private API ----------
+  async #requestWithTimeout(delay, path, requestInitObj = {}) {
+    return await Promise.race([
+      fetch(path, requestInitObj),
+      this.#timeoutPromise(delay),
+    ]);
+  }
+  
+  #timeoutPromise(ms) {
+    return new Promise((_, reject) => {
+      setTimeout(() => reject(new TimeoutError()), ms);
+    });
+  }
+
+  #debouncePromise(func, delay = 200) {
+    if (this.timeout) clearTimeout(this.timeout);
+    if (this.reject) {
+      this.reject(new Error('Aborted'));
+      this.reject = null;
+    }
+
+    return new Promise((resolve, reject) => {
+      this.reject = reject;
+      this.timeout = setTimeout(async () => {
+        try {
+          resolve(await func());
+        } catch (error) {
+          reject(error);
+        }
+        this.timeout = null;
+        this.reject = null;
+      }, delay);
+    });
   }
 
   // ---------- public API ----------
-  async fetchSchedules() {
-    return this.#requestWithTimeout(3000, `${this.url}/schedules`);
+  fetchSchedules() {
+    return this.#debouncePromise(() => this.#requestWithTimeout(3000, `${this.url}/schedules`));
   }
 
-  async fetchBookingsDates() {
+  fetchBookingsDates() {
     return this.#requestWithTimeout(3000, `${this.url}/bookings`);
   }
 
-  async fetchBookingsForDate(date) {
+  fetchBookingsForDate(date) {
     return this.#requestWithTimeout(3000, `${this.url}/bookings/${date}`);
   }
 
@@ -26,7 +63,7 @@ export default class DBAPI {
     });
   }
 
-  async fetchStaff() {
+  fetchStaff() {
     return this.#requestWithTimeout(3000, `${this.url}/staff_members`);
   }
 
@@ -63,20 +100,6 @@ export default class DBAPI {
   async deleteSchedule(form, schedule_id) {
     return await fetch(form.action + `/${schedule_id}`, {
       method: form.getAttribute('method'),
-    });
-  }
-  
-  // ---------- private API ----------
-  async #requestWithTimeout(delay, path, requestInitObj = {}) {
-    return await Promise.race([
-      fetch(path, requestInitObj),
-      this.#timeoutPromise(delay),
-    ]);
-  }
-  
-  #timeoutPromise(ms) {
-    return new Promise((_, reject) => {
-      setTimeout(() => reject(new TimeoutError()), ms);
     });
   }
 }
