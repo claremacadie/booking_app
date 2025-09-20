@@ -1,7 +1,6 @@
 export default class ScheduleList {
-  constructor(appController) {
-    this.appController = appController;
-    this.app = appController.app;
+  constructor(schedules) {
+    this.schedules = schedules;
     this.#init();
   }
 
@@ -13,7 +12,7 @@ export default class ScheduleList {
 
   // ---------- private API ----------
   #createHTML() {
-    this.app.schedules.forEach(schedule => {
+    this.schedules.forEach(schedule => {
       this.$ul.append(schedule.$li);
     });
   }

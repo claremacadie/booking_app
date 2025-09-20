@@ -1,7 +1,6 @@
 export default class CancelBookingForm {
-  constructor(appController) {
-    this.appController = appController;
-    this.app = appController.app;
+  constructor(url) {
+    this.url = url;
     this.#init();
   }
 
@@ -30,7 +29,7 @@ export default class CancelBookingForm {
     this.$submitButton.textContent = 'Submit';
     this.$submitButton.type = 'submit';
 
-    this.$form.action = this.app.url + '/bookings';
+    this.$form.action = this.url + '/bookings';
     this.$form.method = 'PUT';
 
     this.$form.classList.add ('form');

@@ -1,7 +1,6 @@
 export default class StudentForm {
-  constructor(appController, bookingSequence, studentEmail) {
-    this.appController = appController;
-    this.app = appController.app;
+  constructor(url, bookingSequence, studentEmail) {
+    this.url = url;
     this.bookingSequence = bookingSequence;
     this.studentEmail = studentEmail;
     this.#init();
@@ -31,7 +30,7 @@ export default class StudentForm {
     this.$submitButton.textContent = 'Submit';
     this.$submitButton.type = 'submit';
 
-    this.$form.action = this.app.url + '/students';
+    this.$form.action = this.url + '/students';
     this.$form.method = 'POST';
 
     this.$form.classList.add ('form');

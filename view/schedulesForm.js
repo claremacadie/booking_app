@@ -1,7 +1,7 @@
 export default class SchedulesForm {
-  constructor(appController) {
-    this.appController = appController;
-    this.app = appController.app;
+  constructor(url, staff) {
+    this.url = url;
+    this.staff = staff;
     this.scheduleNum = 0;
     this.#init();
   }
@@ -36,7 +36,7 @@ export default class SchedulesForm {
     this.$submitBtn.type = 'submit';
     this.$submitBtn.id = 'btnSubmit';
 
-    this.$form.action = this.app.url + '/schedules';
+    this.$form.action = this.url + '/schedules';
     this.$form.method = 'POST';
 
     this.$form.classList.add('form');
@@ -113,8 +113,8 @@ export default class SchedulesForm {
 
   #createStaffOptions() {
     let staffOptions = [];
-    Object.keys(this.app.staff).forEach(id => {
-      let option = this.#createOption(id, this.app.staff[id].name);
+    Object.keys(this.staff).forEach(id => {
+      let option = this.#createOption(id, this.staff[id].name);
       staffOptions.push(option);
     });
     return staffOptions;

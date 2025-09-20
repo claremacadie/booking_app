@@ -1,7 +1,6 @@
 export default class StaffForm {
-  constructor(appController) {
-    this.appController = appController;
-    this.app = appController.app;
+  constructor(url) {
+    this.url = url
     this.#init();
   }
 
@@ -26,7 +25,7 @@ export default class StaffForm {
     this.$submitButton.textContent = 'Submit';
     this.$submitButton.type = 'submit';
 
-    this.$form.action = this.app.url + '/staff_members';
+    this.$form.action = this.url + '/staff_members';
     this.$form.method = 'POST';
 
     this.$form.classList.add ('form');

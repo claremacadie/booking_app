@@ -1,7 +1,6 @@
 export default class BookingsList {
-  constructor(appController) {
-    this.appController = appController;
-    this.app = appController.app;
+  constructor(bookingsDates) {
+    this.bookingsDates = bookingsDates;
     this.#init();
   }
 
@@ -13,7 +12,7 @@ export default class BookingsList {
 
   // ---------- private API ----------
   #createHTML() {
-    this.app.bookingsDates.forEach(bookingDate => {
+    this.bookingsDates.forEach(bookingDate => {
       this.$ul.append(bookingDate.$li);
     });
   }

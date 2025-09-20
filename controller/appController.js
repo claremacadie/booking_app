@@ -103,7 +103,7 @@ export default class AppController {
     this.#divToDisplay(this.$staffFormDiv);
 
     if (!this.staffForm) {
-      this.staffForm = new StaffForm(this);
+      this.staffForm = new StaffForm(this.app.url);
       this.$staffFormDiv.append(this.staffForm.$form);
       this.staffForm.$form.addEventListener('submit', this.#handleStaffFormSubmit.bind(this));
     }
@@ -118,7 +118,7 @@ export default class AppController {
     await this.app.loadStaff();
 
     if (!this.schedulesForm && this.app.staff) {
-      this.schedulesForm = new SchedulesForm(this);
+      this.schedulesForm = new SchedulesForm(this.app.url, this.app.staff);
       this.$schedulesFormDiv.append(this.schedulesForm.$form);
       this.schedulesForm.$addSchedulesBtn.addEventListener('click', this.#handleAddSchedulesBtn.bind(this));
       this.schedulesForm.$form.addEventListener('submit', this.#handleScheduleFormSubmit.bind(this));
@@ -136,7 +136,7 @@ export default class AppController {
     await this.app.loadStaff();
 
     if (!this.bookingForm && this.app.schedules && this.app.staff) {
-      this.bookingForm = new BookingForm(this);
+      this.bookingForm = new BookingForm(this.app);
       this.$bookingFormDiv.append(this.bookingForm.$form);
       this.bookingForm.$form.addEventListener('submit', this.#handleBookingFormSubmit.bind(this))
     }
@@ -161,7 +161,7 @@ export default class AppController {
     this.#divToDisplay(this.$cancelBookingFormDiv);
 
     if (!this.cancelBookingForm) {
-      this.cancelBookingForm= new CancelBookingForm(this);
+      this.cancelBookingForm= new CancelBookingForm(this.app.url);
       this.$cancelBookingFormDiv.append(this.cancelBookingForm.$form);
       this.cancelBookingForm.$form.addEventListener('submit', this.#handleCancelBookingFormSubmit.bind(this));
     } 
@@ -175,7 +175,7 @@ export default class AppController {
     this.#divToDisplay(this.$deleteScheduleFormDiv);
 
     if (!this.deleteScheduleForm) {
-      this.deleteScheduleForm= new DeleteScheduleForm(this);
+      this.deleteScheduleForm= new DeleteScheduleForm(this.app.url);
       this.$deleteScheduleFormDiv.append(this.deleteScheduleForm.$form);
       this.deleteScheduleForm.$form.addEventListener('submit', this.#handledeleteScheduleFormSubmit.bind(this));
     } 
@@ -312,7 +312,7 @@ export default class AppController {
     if (this.app.schedules.length === 0) {
       this.userMsg("There are currently no schedules available for booking.")
     } else {
-      this.schedulesList = new ScheduleList(this);
+      this.schedulesList = new ScheduleList(this.app.schedules);
       this.$schedulesDiv.append(this.schedulesList.$ul);
     }
   }
@@ -404,7 +404,7 @@ export default class AppController {
   }
 
   #displayStudentForm(bookingSequence, studentEmail) {
-    this.studentForm = new StudentForm(this, bookingSequence, studentEmail);
+    this.studentForm = new StudentForm(this.app.url, bookingSequence, studentEmail);
     this.studentForm.$form.addEventListener('submit', this.#handleStudentFormSubmit.bind(this));
     this.$bookingFormDiv.append(this.studentForm.$form);
   }
@@ -446,7 +446,7 @@ export default class AppController {
     if (this.app.bookingsDates.length === 0) {
       this.userMsg("There are currently no bookings.")
     } else {
-      this.bookingsList = new BookingsList(this);
+      this.bookingsList = new BookingsList(this.app.bookingsDates);
     }
 
     this.$bookingsListDiv.innerHTML = '';
@@ -460,7 +460,7 @@ export default class AppController {
     this.app.getBookingByDate(date).createBookingsHTML();
   }
 
-  // --- Cancel Forms ---
+  // --- Cancel/Delete Forms ---
   async #cancelBooking(form, booking_id) {
     console.log(booking_id)
     try {

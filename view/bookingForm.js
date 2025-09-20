@@ -1,7 +1,8 @@
 export default class BookingForm {
-  constructor(appController) {
-    this.appController = appController;
-    this.app = appController.app;
+  constructor(app) {
+    this.app = app;
+    this.url = app.url;
+    this.schedules = app.schedules;
     this.#init();
   }
 
@@ -26,7 +27,7 @@ export default class BookingForm {
     this.$submitButton.textContent = 'Submit';
     this.$submitButton.type = 'submit';
 
-    this.$form.action = this.app.url + '/bookings';
+    this.$form.action = this.url + '/bookings';
     this.$form.method = 'POST';
 
     this.$form.classList.add ('form');
@@ -70,7 +71,7 @@ export default class BookingForm {
 
   #createScheduleOptions() {
     let scheduleOptions = [];
-    this.app.schedules.forEach(schedule => {
+    this.schedules.forEach(schedule => {
       if (schedule.studentEmail) return;
       let staffName = this.app.getStaffNameById(schedule.staffId);
       let scheduleDescriptionArr = [staffName, schedule.date, schedule.time]
