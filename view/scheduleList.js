@@ -20,6 +20,5 @@ export default class ScheduleList {
 
   #configureHTML() {
     this.$ul.classList.add('schedule-list');
-    this.appController.$schedulesDiv.append(this.$ul);
   }   
 }

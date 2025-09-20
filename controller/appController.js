@@ -10,6 +10,7 @@ import DeleteScheduleForm from '../view/deleteScheduleForm.js';
 export default class AppController {
   constructor(app) {
     this.app = app;
+    this.schedulesList = null;
     this.staffForm = null;
     this.schedulesForm = null;
     this.bookingForm = null;
@@ -309,7 +310,8 @@ export default class AppController {
     if (this.app.schedules.length === 0) {
       this.userMsg("There are currently no schedules available for booking.")
     } else {
-      new ScheduleList(this);
+      this.schedulesList = new ScheduleList(this);
+      this.$schedulesDiv.append(this.schedulesList.$ul);
     }
   }
   
