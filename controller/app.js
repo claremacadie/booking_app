@@ -24,7 +24,8 @@ export default class App {
     // this.appController.displaySchedulesForm();
     // this.appController.displayBookingForm();
     // this.appController.displayBookingsList();
-    this.appController.displayCancelBookingForm();
+    // this.appController.displayCancelBookingForm();
+    this.appController.displayDeleteScheduleForm();
   }
   
   // ---------- public API ----------  

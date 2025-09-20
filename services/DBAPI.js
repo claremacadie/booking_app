@@ -59,6 +59,12 @@ export default class DBAPI {
       method: form.getAttribute('method'),
     });
   }
+
+  async deleteSchedule(form, schedule_id) {
+    return await fetch(form.action + `/${schedule_id}`, {
+      method: form.getAttribute('method'),
+    });
+  }
   
   // ---------- private API ----------
   async #requestWithTimeout(delay, path, requestInitObj = {}) {

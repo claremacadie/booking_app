@@ -5,6 +5,7 @@ import BookingForm from '../view/bookingForm.js';
 import StudentForm from '../view/studentForm.js';
 import BookingsList from '../view/bookingsList.js';
 import CancelBookingForm from '../view/cancelBookingForm.js';
+import DeleteScheduleForm from '../view/deleteScheduleForm.js';
 
 export default class AppController {
   constructor(app) {
@@ -15,6 +16,7 @@ export default class AppController {
     this.studentForm = null;
     this.bookingsList = null;
     this.cancelBookingForm = null;
+    this.deleteScheduleForm = null;
     this.#init();
     this.#bind();
   }
@@ -27,11 +29,13 @@ export default class AppController {
     this.$bookingFormDiv = document.getElementById("booking-form");
     this.$bookingsListDiv = document.getElementById("bookings-list");
     this.$cancelBookingFormDiv = document.getElementById("cancel-booking-form");
+    this.$deleteScheduleFormDiv = document.getElementById("delete-schedule-form");
 
     this.divs = [
       this.$schedulesDiv, this.$staffFormDiv, 
       this.$schedulesFormDiv, this.$bookingFormDiv, 
-      this.$bookingsListDiv, this.$cancelBookingFormDiv
+      this.$bookingsListDiv, this.$cancelBookingFormDiv,
+      this.$deleteScheduleFormDiv,
     ];
 
     this.$userMsg = document.getElementById("user-message");
@@ -43,6 +47,7 @@ export default class AppController {
     this.$bookingFormBtn = document.getElementById("booking-btn");
     this.$bookingsListBtn = document.getElementById("bookings-list-btn");
     this.$cancelBookingFormBtn = document.getElementById("cancel-booking-form-btn");
+    this.$deleteScheduleFormBtn = document.getElementById("delete-schedule-form-btn");
   } 
 
   #bind() {
@@ -52,6 +57,7 @@ export default class AppController {
     this.$bookingFormBtn.addEventListener('click', this.#handleBookingFormBtn.bind(this));
     this.$bookingsListBtn.addEventListener('click', this.#handleBookingsListBtn.bind(this));
     this.$cancelBookingFormBtn.addEventListener('click', this.#handleCancelBookingFormBtn.bind(this));
+    this.$deleteScheduleFormBtn.addEventListener('click', this.#handleDeleteScheduleFormBtn.bind(this));
   }
 
   // ---------- Public API ----------
@@ -155,6 +161,20 @@ export default class AppController {
     } 
   }
 
+  displayDeleteScheduleForm() {
+    this.clearUserMsg();
+    this.clearErrorMsg();
+
+    this.$pageHeading.textContent = "Delete Schedule";
+    this.#divToDisplay(this.$deleteScheduleFormDiv);
+
+    if (!this.deleteScheduleForm) {
+      this.deleteScheduleForm= new DeleteScheduleForm(this);
+      this.$deleteScheduleFormDiv.append(this.deleteScheduleForm.$form);
+      this.deleteScheduleForm.$form.addEventListener('submit', this.#handledeleteScheduleFormSubmit.bind(this));
+    } 
+  }
+
   // ---------- Private handlers ----------
   #handleSchedulesBtn(event) {
     event.preventDefault();
@@ -184,6 +204,11 @@ export default class AppController {
   #handleCancelBookingFormBtn(event) {
     event.preventDefault();
     this.displayCancelBookingForm();    
+  }
+
+  #handleDeleteScheduleFormBtn(event) {
+    event.preventDefault();
+    this.displayDeleteScheduleForm();    
   }
 
   async #handleStaffFormSubmit(event) {
@@ -239,6 +264,17 @@ export default class AppController {
 
     let data = this.#extractData(form);
     this.#cancelBooking(form, data.booking_id);
+  }
+
+  #handledeleteScheduleFormSubmit(event) {
+    event.preventDefault();
+    let form = event.target;
+
+    this.clearUserMsg();
+    this.clearErrorMsg();
+
+    let data = this.#extractData(form);
+    this.#deleteSchedule(form, data.schedule_id);
   }
 
   // ---------- helpers ----------
@@ -431,6 +467,26 @@ export default class AppController {
           this.userMsg(msg);
           alert('Booking Cancelled!')
           this.cancelBookingForm.$form.reset();
+          break;
+        default:
+          throw new Error(msg);
+      }
+    } catch(error) {
+      console.log(error);
+      this.errorMsg(error.message);
+    }
+  }
+
+  async #deleteSchedule(form, schedule_id) {
+    try {
+      let response = await this.app.DBAPI.deleteSchedule(form, schedule_id);
+      let msg = await response.text();
+      
+      switch (response.status) {
+        case 204:
+          this.userMsg(msg);
+          alert('Schedule deleted!')
+          this.deleteScheduleForm.$form.reset();
           break;
         default:
           throw new Error(msg);
