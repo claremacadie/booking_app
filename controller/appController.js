@@ -329,6 +329,7 @@ export default class AppController {
         case 201:
           let responseJson = await response.json();
           this.userMsg(`Successfully created staff with id: ${responseJson.id}`);
+          form.reset();
           break;
         default:
           throw new Error('Something went wrong.')
