@@ -40,7 +40,6 @@ export default class SchedulesForm {
     this.$form.method = 'POST';
 
     this.$form.classList.add('form');
-    this.appController.$schedulesFormDiv.append(this.$form);
   }
 
   // ---------- helpers ----------

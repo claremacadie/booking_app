@@ -118,6 +118,7 @@ export default class AppController {
 
     if (!this.schedulesForm && this.app.staff) {
       this.schedulesForm = new SchedulesForm(this);
+      this.$schedulesFormDiv.append(this.schedulesForm.$form);
       this.schedulesForm.$addSchedulesBtn.addEventListener('click', this.#handleAddSchedulesBtn.bind(this));
       this.schedulesForm.$form.addEventListener('submit', this.#handleScheduleFormSubmit.bind(this));
     }
