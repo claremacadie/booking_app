@@ -28,7 +28,18 @@ export default class App {
     this.appController.displayDeleteScheduleForm();
   }
   
-  // ---------- public API ----------  
+  // ---------- public utilities ----------
+  getStaffNameById(id) {
+    if (!this.staff) return;
+    return this.staff[id].name;
+  }
+
+  getBookingByDate(date) {
+    if (!this.bookingsDates) return;
+    return this.bookingsDates.find(booking => booking.date === date);
+  }
+
+  // ---------- public data loading ----------
   async loadSchedules() {
     this.appController.userMsg('Loading schedules...');
     try {
@@ -53,7 +64,7 @@ export default class App {
     }
   }
 
-  async fetchStaff() {
+  async loadStaff() {
     this.appController.userMsg('Loading staff...');
     try {
       let response = await this.DBAPI.fetchStaff();
@@ -84,9 +95,7 @@ export default class App {
       this.appController.clearUserMsg();
       this.appController.userMsg('Bookings dates finished loading.');
       let jsonData = await response.json();
-      
       this.bookingsDates = [];
-
       jsonData.forEach(date => {
         this.bookingsDates.push(new BookingDate(date));
       });
@@ -117,15 +126,5 @@ export default class App {
       }
       this.appController.errorMsg(`Bookings for ${date} error: ${error.message}`);
     }
-  }
-
-  getStaffNameById(id) {
-    if (!this.staff) return;
-    return this.staff[id].name;
-  }
-
-  getBookingByDate(date) {
-    if (!this.bookingsDates) return;
-    return this.bookingsDates.find(booking => booking.date === date);
   }
 }

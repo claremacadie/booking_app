@@ -61,6 +61,7 @@ export default class AppController {
   }
 
   // ---------- Public API ----------
+  // --- Messages ---
   userMsg(msg) {
     let newMsg = document.createElement('p');
     newMsg.textContent = msg;
@@ -81,6 +82,7 @@ export default class AppController {
     this.$errorMsg.innerHTML = '';
   }
 
+  // --- Div Displays ---
   async displaySchedules() {
     this.$schedulesDiv.innerHTML = '';
     this.clearUserMsg();
@@ -111,7 +113,7 @@ export default class AppController {
     this.$pageHeading.textContent = "Add Schedules";
     this.#divToDisplay(this.$schedulesFormDiv);
 
-    await this.app.fetchStaff();
+    await this.app.loadStaff();
 
     if (!this.schedulesForm && this.app.staff) {
       this.schedulesForm = new SchedulesForm(this);
@@ -128,7 +130,7 @@ export default class AppController {
     this.#divToDisplay(this.$bookingFormDiv);
     
     await this.app.loadSchedules();
-    await this.app.fetchStaff();
+    await this.app.loadStaff();
 
     if (!this.bookingForm && this.app.schedules && this.app.staff) {
       this.bookingForm = new BookingForm(this);
@@ -176,6 +178,7 @@ export default class AppController {
   }
 
   // ---------- Private handlers ----------
+  // --- Navigation Button handlers ---
   #handleSchedulesBtn(event) {
     event.preventDefault();
     this.displaySchedules();
@@ -211,11 +214,12 @@ export default class AppController {
     this.displayDeleteScheduleForm();    
   }
 
+  // --- Form Button handlers ---
   async #handleStaffFormSubmit(event) {
     event.preventDefault();
     let form = event.target;
 
-    let data = this.#formatData(this.#extractData(form));
+    let data = this.#stringifyData(this.#extractData(form));
     this.#sendStaffData(form, data);
   }
 
@@ -244,7 +248,7 @@ export default class AppController {
     event.preventDefault();
     let form = event.target;
 
-    let data = this.#formatData(this.#extractData(form));
+    let data = this.#stringifyData(this.#extractData(form));
     this.#sendStudentData(form, data);
   }
 
@@ -277,7 +281,7 @@ export default class AppController {
     this.#deleteSchedule(form, data.schedule_id);
   }
 
-  // ---------- helpers ----------
+  // ---------- Helpers ----------
   #divToDisplay(displayDiv) {
     this.divs.forEach(div => {
       if (div === displayDiv) {
@@ -303,10 +307,6 @@ export default class AppController {
     let data = Object.fromEntries(formData.entries());
     for (let key in data) {data[key] = data[key].trim()};
     return data;
-  }
-
-  #formatData(data) {
-    return JSON.stringify(data);
   }
 
   #stringifyData(data) {
