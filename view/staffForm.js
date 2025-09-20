@@ -30,7 +30,6 @@ export default class StaffForm {
     this.$form.method = 'POST';
 
     this.$form.classList.add ('form');
-    this.appController.$staffFormDiv.append(this.$form);
   }
 
   // ---------- helpers ----------

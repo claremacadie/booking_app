@@ -104,6 +104,7 @@ export default class AppController {
 
     if (!this.staffForm) {
       this.staffForm = new StaffForm(this);
+      this.$staffFormDiv.append(this.staffForm.$form);
       this.staffForm.$form.addEventListener('submit', this.#handleStaffFormSubmit.bind(this));
     }
   }
