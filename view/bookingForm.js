@@ -30,7 +30,6 @@ export default class BookingForm {
     this.$form.method = 'POST';
 
     this.$form.classList.add ('form');
-    this.appController.$bookingFormDiv.append(this.$form);
   }
 
   // ---------- helpers ----------

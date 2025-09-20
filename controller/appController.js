@@ -126,7 +126,7 @@ export default class AppController {
     this.clearUserMsg();
     this.clearErrorMsg();
     
-    this.$pageHeading.textContent = "Book a Schedule";
+    this.$pageHeading.textContent = "Book A Schedule";
     this.#divToDisplay(this.$bookingFormDiv);
     
     await this.app.loadSchedules();
@@ -134,6 +134,7 @@ export default class AppController {
 
     if (!this.bookingForm && this.app.schedules && this.app.staff) {
       this.bookingForm = new BookingForm(this);
+      this.$bookingFormDiv.append(this.bookingForm.$form);
       this.bookingForm.$form.addEventListener('submit', this.#handleBookingFormSubmit.bind(this))
     }
   }
@@ -292,16 +293,6 @@ export default class AppController {
     })
   }
 
-  // --- Schedules ---
-  #listSchedules() {
-    if (this.app.schedules.length === 0) {
-      this.userMsg("There are currently no schedules available for booking.")
-    } else {
-      new ScheduleList(this);
-    }
-  }
-  
-  // --- Staff Form ---
   #extractData(formElement) {
     let formData = new FormData(formElement);
     let data = Object.fromEntries(formData.entries());
@@ -312,7 +303,17 @@ export default class AppController {
   #stringifyData(data) {
     return JSON.stringify(data);
   }
+
+  // --- Schedules ---
+  #listSchedules() {
+    if (this.app.schedules.length === 0) {
+      this.userMsg("There are currently no schedules available for booking.")
+    } else {
+      new ScheduleList(this);
+    }
+  }
   
+  // --- Staff Form ---
   async #sendStaffData(form, data) {
     try {
       let response = await this.app.DBAPI.createNewStaff(form, data);
