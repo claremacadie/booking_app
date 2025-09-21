@@ -14,6 +14,7 @@ export default class App {
     this.bookingsDates = null;
 
     this.loadSchedules = debouncePromise(this.loadSchedules.bind(this), 300);
+    this.loadStaff = debouncePromise(this.loadStaff.bind(this), 300);
 
     this.#init();
   }

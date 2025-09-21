@@ -92,8 +92,13 @@ export default class AppController {
     this.$pageHeading.textContent = "Schedule List";
     this.#divToDisplay(this.$schedulesDiv);
     
-    await this.app.loadSchedules();
-    if (this.app.schedules) this.#listSchedules();
+    try {
+      await this.app.loadSchedules();
+      if (this.app.schedules) this.#listSchedules();
+    } catch (error) {
+      if (error?.name === 'AbortError') return;
+      throw error;
+    }
   }
   
   displayStaffForm() {
@@ -132,13 +137,24 @@ export default class AppController {
     this.$pageHeading.textContent = "Book A Schedule";
     this.#divToDisplay(this.$bookingFormDiv);
     
-    await this.app.loadSchedules();
-    await this.app.loadStaff();
+    try {
+      await this.app.loadSchedules();
+      if (this.app.schedules) this.#listSchedules();
+    } catch (error) {
+      if (error?.name === 'AbortError') return;
+      throw error;
+    }
 
-    if (!this.bookingForm && this.app.schedules && this.app.staff) {
-      this.bookingForm = new BookingForm(this.app);
-      this.$bookingFormDiv.append(this.bookingForm.$form);
-      this.bookingForm.$form.addEventListener('submit', this.#handleBookingFormSubmit.bind(this))
+    try {
+      await this.app.loadStaff();
+      if (!this.bookingForm && this.app.schedules && this.app.staff) {
+        this.bookingForm = new BookingForm(this.app);
+        this.$bookingFormDiv.append(this.bookingForm.$form);
+        this.bookingForm.$form.addEventListener('submit', this.#handleBookingFormSubmit.bind(this))
+      }
+    } catch (error) {
+      if (error?.name === 'AbortError') return;
+      throw error;
     }
   }
 
