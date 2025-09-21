@@ -3,8 +3,6 @@ import TimeoutError from '../utils/timeoutError.js';
 export default class DBAPI {
   constructor(url) {
     this.url = url;
-    this.timeout = null;
-    this.reject = null;
   }
 
   // ---------- private API ----------
@@ -21,30 +19,9 @@ export default class DBAPI {
     });
   }
 
-  #debouncePromise(func, delay = 200) {
-    if (this.timeout) clearTimeout(this.timeout);
-    if (this.reject) {
-      this.reject(new Error('Aborted'));
-      this.reject = null;
-    }
-
-    return new Promise((resolve, reject) => {
-      this.reject = reject;
-      this.timeout = setTimeout(async () => {
-        try {
-          resolve(await func());
-        } catch (error) {
-          reject(error);
-        }
-        this.timeout = null;
-        this.reject = null;
-      }, delay);
-    });
-  }
-
   // ---------- public API ----------
   fetchSchedules() {
-    return this.#debouncePromise(() => this.#requestWithTimeout(3000, `${this.url}/schedules`));
+    return this.#requestWithTimeout(3000, `${this.url}/schedules`);
   }
 
   fetchBookingsDates() {

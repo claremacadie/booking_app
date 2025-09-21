@@ -1,5 +1,6 @@
 import DBAPI from '../services/DBAPI.js';
 import AppController from './appController.js';
+import debouncePromise from '../utils/debounce.js';
 
 // Import view classes
 import Schedule from '../model/schedule.js';
@@ -11,6 +12,9 @@ export default class App {
     this.schedules = null;
     this.staff = null;
     this.bookingsDates = null;
+
+    this.loadSchedules = debouncePromise(this.loadSchedules.bind(this), 300);
+
     this.#init();
   }
   
